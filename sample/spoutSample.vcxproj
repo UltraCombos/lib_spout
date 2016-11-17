@@ -183,6 +183,7 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
+    <ClCompile Include="..\libs\SpoutControls\src\SpoutControls.cpp" />
     <ClCompile Include="..\libs\SpoutSDK\src\SpoutDirectX.cpp" />
     <ClCompile Include="..\libs\SpoutSDK\src\SpoutGLDXinterop.cpp" />
     <ClCompile Include="..\libs\SpoutSDK\src\SpoutGLextensions.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h" />
+    <ClInclude Include="..\libs\SpoutControls\src\SpoutControls.h" />
     <ClInclude Include="..\libs\SpoutSDK\src\Spout.h" />
     <ClInclude Include="..\libs\SpoutSDK\src\SpoutCommon.h" />
     <ClInclude Include="..\libs\SpoutSDK\src\SpoutDirectX.h" />

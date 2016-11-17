@@ -4,7 +4,7 @@
   <PropertyGroup Label="UserMacros" /> 
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\uc_libs\lib_spout\src;..\..\..\uc_libs\lib_spout\libs\SpoutSDK\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\uc_libs\lib_spout\src;..\..\..\uc_libs\lib_spout\libs\SpoutSDK\src;..\..\..\uc_libs\lib_spout\libs\SpoutControls\src</AdditionalIncludeDirectories>
     </ClCompile>	
   </ItemDefinitionGroup>
   <ItemGroup />

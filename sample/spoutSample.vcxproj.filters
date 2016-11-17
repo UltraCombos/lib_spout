@@ -61,6 +61,9 @@
     <ClCompile Include="..\libs\SpoutSDK\src\SpoutDirectX.cpp">
       <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\libs\SpoutControls\src\SpoutControls.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutControls\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -92,6 +95,12 @@
     </Filter>
     <Filter Include="uc_libs\lib_spout\libs\SpoutSDK\src">
       <UniqueIdentifier>{0eaf9fd9-3c11-444c-99f4-ef721e50daac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uc_libs\lib_spout\libs\SpoutControls">
+      <UniqueIdentifier>{86f6799f-5b11-4400-b779-3d119cc0b9e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uc_libs\lib_spout\libs\SpoutControls\src">
+      <UniqueIdentifier>{0b33199f-8196-41ad-a6c8-512845af3e0f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="..\src\SpoutLibSender.h">
       <Filter>uc_libs\lib_spout\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libs\SpoutControls\src\SpoutControls.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutControls\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

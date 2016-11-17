@@ -81,7 +81,7 @@ namespace SpoutLib
 
 		void release()
 		{
-			if (receiver != nullptr)
+			if (receiver)
 			{
 				receiver->ReleaseReceiver();
 				delete receiver;
@@ -89,10 +89,13 @@ namespace SpoutLib
 			}
 		}
 
+		const string module = "SpoutLib";
+
+		// receiver
 		SpoutReceiver* receiver = nullptr;
 		std::string spout_name;
 		unsigned int width = 0;
 		unsigned int height = 0;
-		const string module = "SpoutLib";
+		
 	};
 }
