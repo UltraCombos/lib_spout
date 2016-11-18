@@ -220,6 +220,7 @@
     <ClInclude Include="..\libs\SpoutSDK\src\SpoutSenderMemory.h" />
     <ClInclude Include="..\libs\SpoutSDK\src\SpoutSenderNames.h" />
     <ClInclude Include="..\libs\SpoutSDK\src\SpoutSharedMemory.h" />
+    <ClInclude Include="..\src\SpoutLibControls.h" />
     <ClInclude Include="..\src\SpoutLibReceiver.h" />
     <ClInclude Include="..\src\SpoutLibSender.h" />
     <ClInclude Include="src\ofApp.h" />

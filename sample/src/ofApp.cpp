@@ -13,8 +13,9 @@ void ofApp::setup(){
 	}
 	
 	{
-		spout_sender = SpoutLib::Sender::create("OF Spout Sender");
 		spout_receiver = SpoutLib::Receiver::create("");
+		spout_sender = SpoutLib::Sender::create("OF Spout Sender");
+		spout_controls = SpoutLib::Controls::create("OF Spout Sender");
 	}
 
 	// allocate fbo
@@ -44,6 +45,12 @@ void ofApp::setup(){
 		g_settings.add(g_threshold.set("threshold", 0.5f, 0, 1));
 		gui.add(g_settings);
 
+		spout_group.setName("spout controls");
+		spout_group.add(spout_text.set("text", "from of"));
+		spout_group.add(spout_bool.set("bool", true));
+		spout_group.add(spout_float.set("float", 1.0f, 0.0f, TWO_PI));
+		gui.add(spout_group);
+
 		gui.loadFromFile(gui_filename);
     }
 	
@@ -53,7 +60,7 @@ void ofApp::setup(){
 void ofApp::update(){
 	ofSetWindowTitle("oF Application: " + ofToString(ofGetFrameRate(), 1));
 
-	spout_receiver->update(texture);
+	
 
 	// update params and ubo
 	updateParameters();
@@ -70,7 +77,9 @@ void ofApp::update(){
 		fbo.end();
 	}
 
+	spout_receiver->update(texture);
 	spout_sender->update(fbo.getTexture());
+	spout_controls->update(spout_group);
 }
 
 //--------------------------------------------------------------
@@ -114,6 +123,9 @@ void ofApp::keyPressed(int key){
 		break;
 	case 'e':
 		spout_receiver->SelectSenderPanel();
+		break;
+	case 'r':
+		spout_controls->openSpoutController();
 		break;
 	}
 }

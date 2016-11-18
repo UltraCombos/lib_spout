@@ -179,6 +179,9 @@
     <ClInclude Include="..\libs\SpoutControls\src\SpoutControls.h">
       <Filter>uc_libs\lib_spout\libs\SpoutControls\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\SpoutLibControls.h">
+      <Filter>uc_libs\lib_spout\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

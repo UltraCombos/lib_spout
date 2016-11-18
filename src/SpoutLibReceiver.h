@@ -49,7 +49,7 @@ namespace SpoutLib
 				if (receiver->CreateReceiver(mutableName, width, height, true))
 				{
 					spout_name = std::string(mutableName);
-					ofLogNotice(module, "receiver %s is created %ux%u", spout_name.c_str(), width, height);
+					ofLogNotice(module, "[%s] is created %ux%u", spout_name.c_str(), width, height);
 					tex.allocate(width, height, GL_RGBA);
 				}
 				else
@@ -89,7 +89,7 @@ namespace SpoutLib
 			}
 		}
 
-		const string module = "SpoutLib";
+		const string module = "SpoutLib::Receiver";
 
 		// receiver
 		SpoutReceiver* receiver = nullptr;

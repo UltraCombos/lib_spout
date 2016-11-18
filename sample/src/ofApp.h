@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 
+#include "SpoutLibControls.h"
 #include "SpoutLibReceiver.h"
 #include "SpoutLibSender.h"
 
@@ -39,10 +40,16 @@ private:
 	ofParameter<float> time_value;
 	ofParameter<float> g_threshold;
 
+	ofParameterGroup spout_group;
+	ofParameter<string> spout_text;
+	ofParameter<bool> spout_bool;
+	ofParameter<float> spout_float;
+
 	// spout
 	ofTexture texture;
 	SpoutLib::SenderRef spout_sender;
 	SpoutLib::ReceiverRef spout_receiver;
+	SpoutLib::ControlsRef spout_controls;
 };
 
 
