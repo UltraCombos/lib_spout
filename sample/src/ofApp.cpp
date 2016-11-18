@@ -46,9 +46,9 @@ void ofApp::setup(){
 		gui.add(g_settings);
 
 		spout_group.setName("spout controls");
-		spout_group.add(spout_text.set("text", "from of"));
-		spout_group.add(spout_bool.set("bool", true));
-		spout_group.add(spout_float.set("float", 1.0f, 0.0f, TWO_PI));
+		spout_group.add(spout_text.set("spout_text", "from of"));
+		spout_group.add(spout_bool.set("spout_bool", true));
+		spout_group.add(spout_float.set("spout_float", 1.0f, 0.0f, TWO_PI));
 		gui.add(spout_group);
 
 		gui.loadFromFile(gui_filename);

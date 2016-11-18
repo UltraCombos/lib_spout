@@ -48,12 +48,7 @@ namespace SpoutLib
 					{
 						updateParameters(ctrl, parameters);
 					}
-				}
-				else
-				{
-					//release();
-				}
-					
+				}					
 			}
 			
 		}
@@ -108,50 +103,35 @@ namespace SpoutLib
 
 		void updateParameters(const control& ctrl, ofParameterGroup& parameters)
 		{
-			//cout << ctrl.type << endl;
 			for (size_t i = 0; i < parameters.size(); i++)
 			{
 				if (parameters[i].getEscapedName() == ctrl.name)
 				{
-					if (parameters[i].type() == typeid(ofParameter<string>).name())
-					{
+					if (parameters[i].type() == typeid(ofParameter<string>).name()) {
 						if (ctrl.type == 100)
 						{
-							printf("string\n");
-							printf("set text %s\n", ctrl.text.c_str());
 							parameters[i].cast<string>().set(ctrl.text);
-							printf("done text %s\n", ctrl.text.c_str());
-							continue;
+							return;
 						}
 					}
-#if 0
-					if (parameters[i].type() == typeid(ofParameter<bool>).name())
-					{
-						if (ctrl.type == 1)
+					else if (parameters[i].type() == typeid(ofParameter<bool>).name()) {
+						if (ctrl.type == 0)
 						{
-							printf("bool\n");
-							printf("set bool %u\n", static_cast<int>(ctrl.value));
 							parameters[i].cast<bool>().set(static_cast<int>(ctrl.value) == 1);
-							printf("done bool %u\n", static_cast<int>(ctrl.value));
-							continue;
+							return;
 						}
 					}
-
-					if (parameters[i].type() == typeid(ofParameter<float>).name())
-					{
+					else if (parameters[i].type() == typeid(ofParameter<float>).name()) {
 						if (ctrl.type == 10)
 						{
-							printf("float\n");
-							printf("set float %f\n", ctrl.value);
 							parameters[i].cast<float>().set(ctrl.value);
-							printf("done float %f\n", ctrl.value);
-							continue;
+							return;
 						}
 					}
-#endif
+					else if (parameters[i].type() == typeid(ofParameterGroup).name()) {
+						updateParameters(ctrl, (ofParameterGroup&)parameters[i]);
+					}
 				}
-
-				createControls((ofParameterGroup&)parameters[i]);
 			}
 		}
 
