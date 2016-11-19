@@ -5,7 +5,6 @@
 
 #include "SpoutLibControls.h"
 #include "SpoutLibReceiver.h"
-#include "SpoutLibSender.h"
 
 class ofApp : public ofBaseApp{
 

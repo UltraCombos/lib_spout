@@ -223,6 +223,7 @@
     <ClInclude Include="..\src\SpoutLibControls.h" />
     <ClInclude Include="..\src\SpoutLibReceiver.h" />
     <ClInclude Include="..\src\SpoutLibSender.h" />
+    <ClInclude Include="..\src\SpoutLibUtilities.h" />
     <ClInclude Include="src\ofApp.h" />
   </ItemGroup>
   <ItemGroup>

@@ -75,9 +75,9 @@ void ofApp::update(){
 
 		fbo.end();
 	}
-
+	
 	spout_sender->update(fbo.getTexture());
-	spout_controls->update(spout_group);
+	spout_controls->send(spout_group);
 }
 
 //--------------------------------------------------------------

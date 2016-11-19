@@ -6,62 +6,71 @@
 #else
 #include <memory>
 #include "ofTexture.h"
-#define TEXTURE ofTexture&
+#define SPOUT_TEX ofTexture&
 #endif
 
 namespace SpoutLib
 {
-	bool isAllocated(TEXTURE tex)
+	static bool isAllocated(SPOUT_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return (tex != nullptr);
 #else
-
+		return tex.isAllocated();
 #endif
 	}
 
-	int getWidth(TEXTURE tex)
+	static int getWidth(SPOUT_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return tex->getWidth();
 #else
-
+		return tex.getWidth();
 #endif
 	}
 
-	int getHeight(TEXTURE tex)
+	static int getHeight(SPOUT_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return tex->getHeight();
 #else
-
+		return tex.getHeight();
 #endif
 	}
 
-	GLint getInternalFormat(TEXTURE tex)
+	static GLint getInternalFormat(SPOUT_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return tex->getInternalFormat();
 #else
-
+		return tex.getTextureData().glInternalFormat;
 #endif
 	}
 
-	GLuint getId(TEXTURE tex)
+	static GLuint getId(SPOUT_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return tex->getId();
 #else
-
+		return tex.getTextureData().textureID;
 #endif
 	}
 
-	GLenum getTarget(TEXTURE tex)
+	static GLenum getTarget(SPOUT_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return tex->getTarget();
 #else
+		return tex.getTextureData().textureTarget;
+#endif
+	}
 
+	static void allocate(SPOUT_TEX tex, int width, int height, GLint glInternalFormat)
+	{
+#ifdef CINDER_CINDER
+		return tex->getTarget();
+#else
+		tex.allocate(width, height, glInternalFormat);
 #endif
 	}
 }

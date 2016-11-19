@@ -1,27 +1,10 @@
 #pragma once
 
 #include "SpoutSender.h"
-
 #include "SpoutLibUtilities.h"
 
 namespace SpoutLib
 {
-	class SpoutTexture
-	{
-	public:
-		gl::Texture2dRef ttttt;
-
-		void fff()
-		{
-			
-			
-			tex->getInternalFormat();
-			tex->getId();
-			tex->getTarget();
-			
-		}
-	};
-
 	using SenderRef = std::shared_ptr<class Sender>;
 
 	class Sender
@@ -37,7 +20,7 @@ namespace SpoutLib
 			release();
 		}
 
-		void update(ofTexture& tex, bool bInvert = false)
+		void update(SPOUT_TEX tex, bool bInvert = false)
 		{
 			updateSender(tex, bInvert);
 		}
@@ -48,19 +31,19 @@ namespace SpoutLib
 		{
 		}
 		
-		void updateSender(ofTexture& tex, bool bInvert)
+		void updateSender(SPOUT_TEX tex, bool bInvert)
 		{
-			if (tex.isAllocated() == false)
+			if (isAllocated(tex) == false)
 			{
 				ofLogWarning(module, "texture is not allocated");
 				return;
 			}
 
-			if (tex.getWidth() != width || tex.getHeight() != height)
+			if (getWidth(tex) != width || getHeight(tex) != height)
 			{
 				release();
-				width = tex.getWidth();
-				height = tex.getHeight();
+				width = getWidth(tex);
+				height = getHeight(tex);
 			}
 
 			if (sender == nullptr)
@@ -78,8 +61,8 @@ namespace SpoutLib
 
 			if (sender)
 			{
-				GLuint id = tex.getTextureData().textureID;
-				GLuint target = tex.getTextureData().textureTarget;
+				GLuint id = getId(tex);
+				GLenum target = getTarget(tex);
 				if (sender->SendTexture(id, target, width, height, bInvert) == false)
 				{
 					release();

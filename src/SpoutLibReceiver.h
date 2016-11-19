@@ -1,9 +1,7 @@
 #pragma once
 
 #include "SpoutReceiver.h"
-
-#include <memory>
-#include "ofTexture.h"
+#include "SpoutLibUtilities.h"
 
 namespace SpoutLib
 {
@@ -22,7 +20,7 @@ namespace SpoutLib
 			release();
 		}
 
-		void update(ofTexture& tex, bool bInvert = false)
+		void update(SPOUT_TEX tex, bool bInvert = false)
 		{
 			updateReceiver(tex, bInvert);
 		}
@@ -45,7 +43,7 @@ namespace SpoutLib
 		{
 		}
 
-		void updateReceiver(ofTexture& tex, bool bInvert)
+		void updateReceiver(SPOUT_TEX tex, bool bInvert)
 		{
 			if (receiver == nullptr)
 			{
@@ -56,8 +54,8 @@ namespace SpoutLib
 				{
 					spout_name = std::string(mutableName);
 					ofLogNotice(module, "[%s] is created %ux%u", spout_name.c_str(), width, height);
-					int frt = tex.isAllocated() ? tex.getTextureData().glInternalFormat : glInternalFormat;
-					tex.allocate(width, height, frt);
+					int frt = isAllocated(tex) ? getInternalFormat(tex) : glInternalFormat;
+					allocate(tex, width, height, frt);
 				}
 				else
 				{
@@ -69,15 +67,15 @@ namespace SpoutLib
 			{
 				char mutableName[256];
 				strcpy_s(mutableName, spout_name.size() + 1, spout_name.c_str());
-				GLuint id = tex.getTextureData().textureID;
-				GLuint target = tex.getTextureData().textureTarget;
+				GLuint id = getId(tex);
+				GLenum target = getTarget(tex);
 				if (receiver->ReceiveTexture(mutableName, width, height, id, target, bInvert))
 				{
 					spout_name = std::string(mutableName);
-					if (width != tex.getWidth() || height != tex.getHeight())
+					if (width != SpoutLib::getWidth(tex) || height != SpoutLib::getHeight(tex))
 					{
-						int frt = tex.getTextureData().glInternalFormat;
-						tex.allocate(width, height, frt);
+						int frt = getInternalFormat(tex);
+						allocate(tex, width, height, frt);
 					}
 				}
 				else
