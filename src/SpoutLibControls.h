@@ -43,14 +43,28 @@ namespace SpoutLib
 			{
 				if (spout_controls->CheckControls(controls))
 				{
-					printf("%u controls\n", controls.size());
 					for (const auto& ctrl : controls)
 					{
-						updateParameters(ctrl, parameters);
+						if (control_map.find(ctrl.name) == control_map.end())
+						{
+							ofLogWarning(module, "get contorl [%s] is unknown", ctrl.name.c_str());
+							continue;
+						}
+						switch (ctrl.type)
+						{
+						case 100: 
+							setValue(control_map[ctrl.name], ctrl.text); break;
+						case 0: 
+							setValue(control_map[ctrl.name], static_cast<int>(ctrl.value) == 1); break;
+						case 10: 
+							setValue(control_map[ctrl.name], ctrl.value); break;
+						default:
+							ofLogWarning(module, "get contorl [%s] type(%u) is unknown", ctrl.name.c_str(), ctrl.type);
+							break;
+						}
 					}
 				}					
-			}
-			
+			}			
 		}
 
 		void openSpoutController()
@@ -77,6 +91,7 @@ namespace SpoutLib
 					string name = param.getName();
 					string value = param.get();
 					spout_controls->CreateControl(name, "text", value);
+					control_map[name] = param.newReference();
 					ofLogNotice(module, "CreateControl text: %s, %s", name.c_str(), value.c_str());
 				}
 				else if (parameters[i].type() == typeid(ofParameter<bool>).name()) {
@@ -84,6 +99,7 @@ namespace SpoutLib
 					string name = param.getName();
 					bool value = param.get();
 					spout_controls->CreateControl(name, "bool", int(value));
+					control_map[name] = param.newReference();
 					ofLogNotice(module, "CreateControl bool: %s, %u", name.c_str(), int(value));
 				}
 				else if (parameters[i].type() == typeid(ofParameter<float>).name()) {
@@ -93,6 +109,7 @@ namespace SpoutLib
 					float minimum = param.getMin();
 					float maximum = param.getMax();
 					spout_controls->CreateControl(name, "float", minimum, maximum, value);
+					control_map[name] = param.newReference();
 					ofLogNotice(module, "CreateControl float: %s, %f, %f, %f", name.c_str(), value, minimum, maximum);
 				}
 				else if (parameters[i].type() == typeid(ofParameterGroup).name()) {
@@ -101,6 +118,13 @@ namespace SpoutLib
 			}
 		}
 
+		template<typename T>
+		void setValue(std::shared_ptr<ofAbstractParameter> p, T v)
+		{
+			p->cast<T>().set(v);
+		}
+
+#if 0
 		void updateParameters(const control& ctrl, ofParameterGroup& parameters)
 		{
 			for (size_t i = 0; i < parameters.size(); i++)
@@ -134,7 +158,7 @@ namespace SpoutLib
 				}
 			}
 		}
-
+#endif
 		void release()
 		{
 			if (spout_controls)
@@ -151,5 +175,7 @@ namespace SpoutLib
 		std::string spout_name;
 		SpoutControls* spout_controls = nullptr;
 		std::vector<control> controls;
+
+		std::map<std::string, std::shared_ptr<ofAbstractParameter>> control_map;
 	};
 }
