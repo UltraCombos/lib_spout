@@ -42,7 +42,6 @@ private:
 	ofParameterGroup spout_group;
 
 	// spout
-	ofTexture texture;
 	SpoutLib::ReceiverRef spout_receiver = nullptr;
 	SpoutLib::ControlsRef spout_controls = nullptr;
 };

@@ -8,7 +8,7 @@
 #include <memory>
 #include "ofTexture.h"
 #define SPOUTLIB_TEX ofTexture&
-#define SPOUT_FLIP false
+#define SPOUTLIB_INVERT false
 #endif
 
 namespace SpoutLib { namespace Util
@@ -65,15 +65,6 @@ namespace SpoutLib { namespace Util
 		return tex->getTarget();
 #else
 		return tex.getTextureData().textureTarget;
-#endif
-	}
-
-	static void allocate(SPOUTLIB_TEX tex, int width, int height, GLint glInternalFormat)
-	{
-#ifdef CINDER_CINDER
-		tex = ci::gl::Texture2d::create(width, height, ci::gl::Texture2d::Format().internalFormat(glInternalFormat));
-#else
-		tex.allocate(width, height, glInternalFormat);
 #endif
 	}
 

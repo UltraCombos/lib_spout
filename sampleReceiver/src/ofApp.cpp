@@ -72,7 +72,7 @@ void ofApp::update(){
 		fbo.end();
 	}
 
-	spout_receiver->update(texture);
+	spout_receiver->update();
 	//spout_controls->update(spout_group);
 
 	if (spout_receiver->isInitialized())
@@ -91,9 +91,10 @@ void ofApp::draw(){
 	
 	fbo.draw(viewport);
 
-	if (texture.isAllocated())
+	auto& tex = spout_receiver->getTexture();
+	if (tex.isAllocated())
 	{
-		texture.draw(0, 0);
+		tex.draw(0, 0);
 	}
 
 	if (spout_receiver->isInitialized())

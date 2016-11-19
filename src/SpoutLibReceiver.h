@@ -37,6 +37,7 @@ namespace SpoutLib
 		void setName(std::string name) { spout_name = name; release(); }
 		int getWidth() { return width; }
 		int getHeight() { return height; }
+		SPOUTLIB_TEX getTexture() { return texture; }
 
 	private:
 		Receiver(const std::string& spoutName)
@@ -99,7 +100,7 @@ namespace SpoutLib
 #ifdef CINDER_CINDER
 			texture = ci::gl::Texture2d::create(width, height, ci::gl::Texture2d::Format().internalFormat(glInternalFormat));
 #else
-			tex.allocate(width, height, glInternalFormat);
+			texture.allocate(width, height, glInternalFormat);
 #endif
 		}
 
@@ -111,6 +112,10 @@ namespace SpoutLib
 		unsigned int width = 0;
 		unsigned int height = 0;
 		GLint glInternalFormat = GL_RGBA8;
-		SPOUTLIB_TEX texture;
+#ifdef CINDER_CINDER
+		ci::gl::Texture2dRef texture = nullptr;
+#else
+		ofTexture texture;
+#endif
 	};
 }
