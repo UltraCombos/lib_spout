@@ -22,7 +22,7 @@ namespace SpoutLib
 			release();
 		}
 
-		void update(ofParameterGroup& parameters)
+		void send(ofParameterGroup& parameters)
 		{
 			if (spout_controls == nullptr)
 			{
@@ -65,6 +65,74 @@ namespace SpoutLib
 					}
 				}					
 			}			
+		}
+
+		void receive(ofParameterGroup& parameters)
+		{
+			if (spout_controls == nullptr)
+			{
+				spout_controls = new SpoutControls;
+				//spout_controls->FindControls(spout_name);
+
+				string file_path;
+				if (spout_controls->FindControlFile(file_path))
+				{
+					
+					//cout << "get " << file_path << endl;
+				}
+				string map_name = spout_name;
+				if (spout_controls->FindControls(map_name))
+				{
+					cout << "get " << map_name << endl;
+				}
+				if (spout_controls->OpenControls(spout_name))
+				{
+					ofLogNotice(module, "[%s] is created", spout_name.c_str());
+				}
+				else
+				{
+					//cout << "check" << endl;
+					release();
+				}
+
+			}
+
+			if (spout_controls)
+			{
+				
+				if (spout_controls->CheckControls(controls))
+				{
+					
+					for (const auto& ctrl : controls)
+					{
+						if (control_map.find(ctrl.name) != control_map.end())
+							continue;
+						if (ctrl.type == 100) {
+							ofParameter<std::string> p;
+							parameters.add(p.set(ctrl.name, ctrl.text));
+							control_map[ctrl.name] = p.newReference();
+							cout << "add " << ctrl.name << endl;
+						}
+						else if (ctrl.type == 0) {
+							ofParameter<bool> p;
+							parameters.add(p.set(ctrl.name, static_cast<int>(ctrl.value) == 1));
+							control_map[ctrl.name] = p.newReference();
+							cout << "add " << ctrl.name << endl;
+						}
+						else if (ctrl.type == 10) {
+							ofParameter<float> p;
+							parameters.add(p.set(ctrl.name, ctrl.value));
+							control_map[ctrl.name] = p.newReference();
+							cout << "add " << ctrl.name << endl;
+						}
+						else {
+							ofLogWarning(module, "get contorl [%s] type(%u) is unknown", ctrl.name.c_str(), ctrl.type);
+						}
+					}
+				}
+				if (spout_controls->SetControls(controls) == false)
+					printf("fffffff\n");
+			}
 		}
 
 		void openSpoutController()
@@ -176,6 +244,6 @@ namespace SpoutLib
 		SpoutControls* spout_controls = nullptr;
 		std::vector<control> controls;
 
-		std::map<std::string, std::shared_ptr<ofAbstractParameter>> control_map;
+		std::unordered_map<std::string, std::shared_ptr<ofAbstractParameter>> control_map;
 	};
 }

@@ -14,8 +14,6 @@ void ofApp::setup(){
 	
 	{
 		spout_receiver = SpoutLib::Receiver::create("");
-		spout_sender = SpoutLib::Sender::create("OF Spout Sender");
-		spout_controls = SpoutLib::Controls::create("OF Spout Sender");
 	}
 
 	// allocate fbo
@@ -46,9 +44,6 @@ void ofApp::setup(){
 		gui.add(g_settings);
 
 		spout_group.setName("spout controls");
-		spout_group.add(spout_text.set("spout_text", "from of"));
-		spout_group.add(spout_bool.set("spout_bool", true));
-		spout_group.add(spout_float.set("spout_float", 1.0f, 0.0f, TWO_PI));
 		gui.add(spout_group);
 
 		gui.loadFromFile(gui_filename);
@@ -69,17 +64,24 @@ void ofApp::update(){
 	{
 		fbo.begin();
 		ofClear(0);
-		auto viewport = ofGetCurrentViewport();
-		float x = ((float)ofGetMouseX() / ofGetWidth()) * viewport.width;
-		float y = ((float)ofGetMouseY() / ofGetHeight()) * viewport.height;
-		ofDrawCircle(x, y, 30.0f);
+		//auto viewport = ofGetCurrentViewport();
+		//float x = ((float)ofGetMouseX() / ofGetWidth()) * viewport.width;
+		//float y = ((float)ofGetMouseY() / ofGetHeight()) * viewport.height;
+		//ofDrawCircle(x, y, 30.0f);
 
 		fbo.end();
 	}
 
 	spout_receiver->update(texture);
-	spout_sender->update(fbo.getTexture());
-	spout_controls->update(spout_group);
+	//spout_controls->update(spout_group);
+
+	if (spout_receiver->isInitialized())
+	{
+		if (spout_controls == nullptr)
+			spout_controls = SpoutLib::Controls::create(spout_receiver->getName());
+		else
+			spout_controls->receive(spout_group);
+	}
 }
 
 //--------------------------------------------------------------
@@ -92,6 +94,14 @@ void ofApp::draw(){
 	if (texture.isAllocated())
 	{
 		texture.draw(0, 0);
+	}
+
+	if (spout_receiver->isInitialized())
+	{
+		ofVec2f pos(20, 20);
+		ofVec2f offset(0, 15);
+		ofDrawBitmapString(spout_receiver->getName(), pos);
+		pos += offset;
 	}
 
 	// draw debug things
@@ -125,7 +135,7 @@ void ofApp::keyPressed(int key){
 		spout_receiver->SelectSenderPanel();
 		break;
 	case 'r':
-		spout_controls->openSpoutController();
+		//spout_controls->openSpoutController();
 		break;
 	}
 }

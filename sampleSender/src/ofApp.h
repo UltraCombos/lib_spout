@@ -4,7 +4,6 @@
 #include "ofxGui.h"
 
 #include "SpoutLibControls.h"
-#include "SpoutLibReceiver.h"
 #include "SpoutLibSender.h"
 
 class ofApp : public ofBaseApp{
@@ -46,9 +45,7 @@ private:
 	ofParameter<float> spout_float;
 
 	// spout
-	ofTexture texture;
 	SpoutLib::SenderRef spout_sender;
-	SpoutLib::ReceiverRef spout_receiver;
 	SpoutLib::ControlsRef spout_controls;
 };
 

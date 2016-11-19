@@ -13,7 +13,6 @@ void ofApp::setup(){
 	}
 	
 	{
-		spout_receiver = SpoutLib::Receiver::create("");
 		spout_sender = SpoutLib::Sender::create("OF Spout Sender");
 		spout_controls = SpoutLib::Controls::create("OF Spout Sender");
 	}
@@ -58,7 +57,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	ofSetWindowTitle("oF Application: " + ofToString(ofGetFrameRate(), 1));
+	ofSetWindowTitle("oF Spout Sender: " + ofToString(ofGetFrameRate(), 1));
 
 	
 
@@ -77,7 +76,6 @@ void ofApp::update(){
 		fbo.end();
 	}
 
-	spout_receiver->update(texture);
 	spout_sender->update(fbo.getTexture());
 	spout_controls->update(spout_group);
 }
@@ -88,11 +86,6 @@ void ofApp::draw(){
 	auto viewport = ofGetCurrentViewport();
 	
 	fbo.draw(viewport);
-
-	if (texture.isAllocated())
-	{
-		texture.draw(0, 0);
-	}
 
 	// draw debug things
 	if (is_debug_visible)
@@ -121,10 +114,7 @@ void ofApp::keyPressed(int key){
 	case 'l':
 		gui.loadFromFile(gui_filename);
 		break;
-	case 'e':
-		spout_receiver->SelectSenderPanel();
-		break;
-	case 'r':
+	case 'c':
 		spout_controls->openSpoutController();
 		break;
 	}

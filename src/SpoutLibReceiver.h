@@ -33,6 +33,12 @@ namespace SpoutLib
 				receiver->SelectSenderPanel();
 		}
 
+		bool isInitialized() { return (receiver != nullptr); }
+		std::string getName() { return spout_name; }
+		void setName(std::string name) { spout_name = name; release(); }
+		int getWidth() { return width; }
+		int getHeight() { return height; }
+
 	private:
 		Receiver(const string& spoutName)
 			:spout_name(spoutName)
@@ -50,7 +56,8 @@ namespace SpoutLib
 				{
 					spout_name = std::string(mutableName);
 					ofLogNotice(module, "[%s] is created %ux%u", spout_name.c_str(), width, height);
-					tex.allocate(width, height, GL_RGBA);
+					int frt = tex.isAllocated() ? tex.getTextureData().glInternalFormat : glInternalFormat;
+					tex.allocate(width, height, frt);
 				}
 				else
 				{
@@ -69,7 +76,8 @@ namespace SpoutLib
 					spout_name = std::string(mutableName);
 					if (width != tex.getWidth() || height != tex.getHeight())
 					{
-						tex.allocate(width, height, GL_RGBA);
+						int frt = tex.getTextureData().glInternalFormat;
+						tex.allocate(width, height, frt);
 					}
 				}
 				else
@@ -96,6 +104,6 @@ namespace SpoutLib
 		std::string spout_name;
 		unsigned int width = 0;
 		unsigned int height = 0;
-		
+		GLint glInternalFormat = GL_RGBA8;
 	};
 }
