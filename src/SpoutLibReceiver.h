@@ -10,7 +10,7 @@ namespace SpoutLib
 	class Receiver
 	{
 	public:
-		static ReceiverRef create(const string& spoutName = "OF Spout")
+		static ReceiverRef create(const std::string& spoutName = "")
 		{
 			return ReceiverRef(new Receiver(spoutName));
 		}
@@ -20,9 +20,10 @@ namespace SpoutLib
 			release();
 		}
 
-		void update(SPOUT_TEX tex, bool bInvert = false)
+		SPOUTLIB_TEX update(bool bInvert = SPOUTLIB_INVERT)
 		{
-			updateReceiver(tex, bInvert);
+			updateReceiver(bInvert);
+			return texture;
 		}
 
 		void SelectSenderPanel()
@@ -38,12 +39,12 @@ namespace SpoutLib
 		int getHeight() { return height; }
 
 	private:
-		Receiver(const string& spoutName)
+		Receiver(const std::string& spoutName)
 			:spout_name(spoutName)
 		{
 		}
 
-		void updateReceiver(SPOUT_TEX tex, bool bInvert)
+		void updateReceiver(bool bInvert)
 		{
 			if (receiver == nullptr)
 			{
@@ -53,9 +54,8 @@ namespace SpoutLib
 				if (receiver->CreateReceiver(mutableName, width, height, true))
 				{
 					spout_name = std::string(mutableName);
-					ofLogNotice(module, "[%s] is created %ux%u", spout_name.c_str(), width, height);
-					int frt = isAllocated(tex) ? getInternalFormat(tex) : glInternalFormat;
-					allocate(tex, width, height, frt);
+					printf("[%s] '%s' is created %ux%u\n", module.c_str(), spout_name.c_str(), width, height);
+					allocateTexture();
 				}
 				else
 				{
@@ -67,15 +67,14 @@ namespace SpoutLib
 			{
 				char mutableName[256];
 				strcpy_s(mutableName, spout_name.size() + 1, spout_name.c_str());
-				GLuint id = getId(tex);
-				GLenum target = getTarget(tex);
+				GLuint id = Util::getId(texture);
+				GLenum target = Util::getTarget(texture);
 				if (receiver->ReceiveTexture(mutableName, width, height, id, target, bInvert))
 				{
 					spout_name = std::string(mutableName);
-					if (width != SpoutLib::getWidth(tex) || height != SpoutLib::getHeight(tex))
+					if (width != Util::getWidth(texture) || height != Util::getHeight(texture))
 					{
-						int frt = getInternalFormat(tex);
-						allocate(tex, width, height, frt);
+						allocateTexture();
 					}
 				}
 				else
@@ -95,7 +94,16 @@ namespace SpoutLib
 			}
 		}
 
-		const string module = "SpoutLib::Receiver";
+		void allocateTexture()
+		{
+#ifdef CINDER_CINDER
+			texture = ci::gl::Texture2d::create(width, height, ci::gl::Texture2d::Format().internalFormat(glInternalFormat));
+#else
+			tex.allocate(width, height, glInternalFormat);
+#endif
+		}
+
+		const std::string module = "SpoutLib::Receiver";
 
 		// receiver
 		SpoutReceiver* receiver = nullptr;
@@ -103,5 +111,6 @@ namespace SpoutLib
 		unsigned int width = 0;
 		unsigned int height = 0;
 		GLint glInternalFormat = GL_RGBA8;
+		SPOUTLIB_TEX texture;
 	};
 }

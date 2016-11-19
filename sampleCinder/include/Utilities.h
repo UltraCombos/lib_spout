@@ -13,7 +13,6 @@ namespace
 	
 	ci::gl::TextureRef getInfoTexture(float fps, double timeStep, double elapsedTime, double timeValue)
 	{
-
 		ci::TextLayout info_text;
 		info_text.clear(ci::ColorA(0.2f, 0.2f, 0.2f, 0.5f));
 		info_text.setFont(ci::Font("Arial", 17));

@@ -2,7 +2,6 @@
 
 #include "SpoutControls.h"
 
-#include "ofTexture.h"
 #include "ofParameter.h"
 
 namespace SpoutLib
@@ -192,41 +191,6 @@ namespace SpoutLib
 			p->cast<T>().set(v);
 		}
 
-#if 0
-		void updateParameters(const control& ctrl, ofParameterGroup& parameters)
-		{
-			for (size_t i = 0; i < parameters.size(); i++)
-			{
-				if (parameters[i].getEscapedName() == ctrl.name)
-				{
-					if (parameters[i].type() == typeid(ofParameter<string>).name()) {
-						if (ctrl.type == 100)
-						{
-							parameters[i].cast<string>().set(ctrl.text);
-							return;
-						}
-					}
-					else if (parameters[i].type() == typeid(ofParameter<bool>).name()) {
-						if (ctrl.type == 0)
-						{
-							parameters[i].cast<bool>().set(static_cast<int>(ctrl.value) == 1);
-							return;
-						}
-					}
-					else if (parameters[i].type() == typeid(ofParameter<float>).name()) {
-						if (ctrl.type == 10)
-						{
-							parameters[i].cast<float>().set(ctrl.value);
-							return;
-						}
-					}
-					else if (parameters[i].type() == typeid(ofParameterGroup).name()) {
-						updateParameters(ctrl, (ofParameterGroup&)parameters[i]);
-					}
-				}
-			}
-		}
-#endif
 		void release()
 		{
 			if (spout_controls)

@@ -10,7 +10,7 @@ namespace SpoutLib
 	class Sender
 	{
 	public:
-		static SenderRef create(const string& spoutName = "OF Spout")
+		static SenderRef create(const std::string& spoutName = "OF Spout")
 		{
 			return SenderRef(new Sender(spoutName));
 		}
@@ -20,30 +20,30 @@ namespace SpoutLib
 			release();
 		}
 
-		void update(SPOUT_TEX tex, bool bInvert = false)
+		void update(SPOUTLIB_TEX tex, bool bInvert = SPOUTLIB_INVERT)
 		{
 			updateSender(tex, bInvert);
 		}
 
 	private:
-		Sender(const string& spoutName)
+		Sender(const std::string& spoutName)
 			:spout_name(spoutName)
 		{
 		}
 		
-		void updateSender(SPOUT_TEX tex, bool bInvert)
+		void updateSender(SPOUTLIB_TEX tex, bool bInvert)
 		{
-			if (isAllocated(tex) == false)
+			if (Util::isAllocated(tex) == false)
 			{
-				ofLogWarning(module, "texture is not allocated");
+				std::printf("[%s] texture is not allocated\n", module.c_str());
 				return;
 			}
 
-			if (getWidth(tex) != width || getHeight(tex) != height)
+			if (Util::getWidth(tex) != width || Util::getHeight(tex) != height)
 			{
 				release();
-				width = getWidth(tex);
-				height = getHeight(tex);
+				width = Util::getWidth(tex);
+				height = Util::getHeight(tex);
 			}
 
 			if (sender == nullptr)
@@ -51,7 +51,7 @@ namespace SpoutLib
 				sender = new SpoutSender;
 				if (sender->CreateSender(spout_name.c_str(), width, height))
 				{
-					ofLogNotice(module, "[%s] is created", spout_name.c_str());
+					std::printf("[%s] '%s' is created\n", module.c_str(), spout_name.c_str());
 				}
 				else
 				{
@@ -61,8 +61,8 @@ namespace SpoutLib
 
 			if (sender)
 			{
-				GLuint id = getId(tex);
-				GLenum target = getTarget(tex);
+				GLuint id = Util::getId(tex);
+				GLenum target = Util::getTarget(tex);
 				if (sender->SendTexture(id, target, width, height, bInvert) == false)
 				{
 					release();

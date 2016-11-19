@@ -5,6 +5,7 @@
 #include "Utilities.h"
 
 #include "SpoutLibSender.h"
+#include "SpoutLibReceiver.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -36,7 +37,10 @@ private:
 	gl::FboRef fbo;
 
 	bool is_debug_visible = true;
-	
+
+	gl::TextureRef spout_tex;
+	SpoutLib::SenderRef spout_sender;
+	SpoutLib::ReceiverRef spout_receiver;
 };
 
 void ciApp::setup()
@@ -48,9 +52,11 @@ void ciApp::setup()
 	// setup fbo
 	gl::Fbo::Format fbo_format;
 	fbo_format.setSamples(4);
-	fbo_format.setColorTextureFormat(gl::Texture2d::Format().internalFormat(GL_RGBA16F));
+	fbo_format.setColorTextureFormat(gl::Texture2d::Format().internalFormat(GL_RGBA8));
 	fbo = gl::Fbo::create(FBO_WIDTH, FBO_HEIGHT, fbo_format.colorTexture());
 
+	spout_sender = SpoutLib::Sender::create("Cinder Spout");
+	spout_receiver = SpoutLib::Receiver::create("");
 }
 
 void ciApp::keyDown(KeyEvent event)
@@ -65,6 +71,9 @@ void ciApp::keyDown(KeyEvent event)
 		break;
 	case KeyEvent::KEY_F1:
 		is_debug_visible = !is_debug_visible;
+		break;
+	case KeyEvent::KEY_c:
+		spout_receiver->SelectSenderPanel();
 		break;
 	}
 }
@@ -91,9 +100,17 @@ void ciApp::update()
 
 		const gl::ScopedDepth scp_depth(true);
 		const gl::ScopedMatrices scp_m;
+		gl::setMatricesWindow(fbo->getSize());
+
+		vec2 mouse_pos = ((vec2)getMousePos() / (vec2)getWindowSize()) * (vec2)fbo->getSize();
+
+		gl::drawSolidCircle(mouse_pos, 30.0f);
 
 		gl::drawColorCube(vec3(0), vec3(1, 2, 3));
 	}
+
+	spout_sender->update(fbo->getColorTexture());
+	spout_tex = spout_receiver->update();
 }
 
 void ciApp::draw()
@@ -102,9 +119,20 @@ void ciApp::draw()
 	gl::clear();
 	
 	{
-		auto rect = Rectf(fbo->getBounds()).getCenteredFit(viewport, false);
+		auto left_viewport = viewport;
+		left_viewport.setX2(left_viewport.x2 / 2);
+		auto rect = Rectf(fbo->getBounds()).getCenteredFit(left_viewport, false);
 		gl::draw(fbo->getColorTexture(), rect);		
 	}
+
+	if (spout_tex)
+	{
+		auto right_viewport = viewport;
+		right_viewport.setX1(right_viewport.x2 / 2);
+		auto rect = Rectf(spout_tex->getBounds()).getCenteredFit(right_viewport, false);
+		gl::draw(spout_tex, rect);
+	}
+		
 
 	if (is_debug_visible)
 	{

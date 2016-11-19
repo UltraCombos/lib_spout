@@ -2,16 +2,19 @@
 
 #ifdef CINDER_CINDER
 #include "cinder/gl/Texture.h"
-#define TEXTURE gl::Texture2dRef
+#define SPOUTLIB_TEX ci::gl::Texture2dRef
+#define SPOUTLIB_INVERT true
 #else
 #include <memory>
 #include "ofTexture.h"
-#define SPOUT_TEX ofTexture&
+#define SPOUTLIB_TEX ofTexture&
+#define SPOUT_FLIP false
 #endif
 
-namespace SpoutLib
+namespace SpoutLib { namespace Util
 {
-	static bool isAllocated(SPOUT_TEX tex)
+	
+	static bool isAllocated(SPOUTLIB_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return (tex != nullptr);
@@ -20,7 +23,7 @@ namespace SpoutLib
 #endif
 	}
 
-	static int getWidth(SPOUT_TEX tex)
+	static int getWidth(SPOUTLIB_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return tex->getWidth();
@@ -29,7 +32,7 @@ namespace SpoutLib
 #endif
 	}
 
-	static int getHeight(SPOUT_TEX tex)
+	static int getHeight(SPOUTLIB_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return tex->getHeight();
@@ -38,7 +41,7 @@ namespace SpoutLib
 #endif
 	}
 
-	static GLint getInternalFormat(SPOUT_TEX tex)
+	static GLint getInternalFormat(SPOUTLIB_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return tex->getInternalFormat();
@@ -47,7 +50,7 @@ namespace SpoutLib
 #endif
 	}
 
-	static GLuint getId(SPOUT_TEX tex)
+	static GLuint getId(SPOUTLIB_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return tex->getId();
@@ -56,7 +59,7 @@ namespace SpoutLib
 #endif
 	}
 
-	static GLenum getTarget(SPOUT_TEX tex)
+	static GLenum getTarget(SPOUTLIB_TEX tex)
 	{
 #ifdef CINDER_CINDER
 		return tex->getTarget();
@@ -65,12 +68,13 @@ namespace SpoutLib
 #endif
 	}
 
-	static void allocate(SPOUT_TEX tex, int width, int height, GLint glInternalFormat)
+	static void allocate(SPOUTLIB_TEX tex, int width, int height, GLint glInternalFormat)
 	{
 #ifdef CINDER_CINDER
-		return tex->getTarget();
+		tex = ci::gl::Texture2d::create(width, height, ci::gl::Texture2d::Format().internalFormat(glInternalFormat));
 #else
 		tex.allocate(width, height, glInternalFormat);
 #endif
 	}
-}
+
+}}
