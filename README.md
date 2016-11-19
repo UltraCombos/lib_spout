@@ -1,2 +1,2 @@
-# SpoutLibrary
-spout warpped for OF 
+# Spout (WIP)
+spout warpped for OF and cinder
