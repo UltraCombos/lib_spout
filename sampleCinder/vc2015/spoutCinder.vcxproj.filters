@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Blocks">
+      <UniqueIdentifier>{74cfabee-20d3-45be-85f8-a58ff867cfae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uc_libs">
+      <UniqueIdentifier>{52f7c0a5-c99b-42c3-a7cd-507ef624e82c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uc_libs\lib_spout">
+      <UniqueIdentifier>{1ec307aa-86e1-4698-a6ac-caef26fe111f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uc_libs\lib_spout\src">
+      <UniqueIdentifier>{11a9b550-bcc4-442d-96eb-d1d1efd5cc66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uc_libs\lib_spout\libs">
+      <UniqueIdentifier>{e3b375a1-4a1d-429c-80ec-099f0521034f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uc_libs\lib_spout\libs\SpoutSDK">
+      <UniqueIdentifier>{849c1540-c54f-4c2f-9aa2-c79c2e0d5302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uc_libs\lib_spout\libs\SpoutSDK\src">
+      <UniqueIdentifier>{67a78d33-0c8d-4a6d-b849-d354dcf3a7fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uc_libs\lib_spout\libs\SpoutControls">
+      <UniqueIdentifier>{db6d3284-2d55-4f16-8edb-9297479f285f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uc_libs\lib_spout\libs\SpoutControls\src">
+      <UniqueIdentifier>{2f67dded-de0f-40fc-a122-8fa8c3ec62b7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\ciApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ciApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClInclude Include="..\include\Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\libs\SpoutSDK\src\SpoutGLextensions.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\SpoutSDK\src\SpoutMemoryShare.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\SpoutSDK\src\SpoutReceiver.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\SpoutSDK\src\SpoutSDK.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\SpoutSDK\src\SpoutSender.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\SpoutSDK\src\SpoutSenderMemory.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\SpoutSDK\src\SpoutSenderNames.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\SpoutSDK\src\SpoutSharedMemory.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\SpoutSDK\src\SpoutDirectX.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\SpoutSDK\src\SpoutGLDXinterop.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\SpoutControls\src\SpoutControls.cpp">
+      <Filter>uc_libs\lib_spout\libs\SpoutControls\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SpoutLibReceiver.h">
+      <Filter>uc_libs\lib_spout\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SpoutLibSender.h">
+      <Filter>uc_libs\lib_spout\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SpoutLibControls.h">
+      <Filter>uc_libs\lib_spout\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\SpoutGLDXinterop.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\SpoutGLextensions.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\SpoutMemoryShare.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\SpoutReceiver.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\SpoutSDK.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\SpoutSender.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\SpoutSenderMemory.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\SpoutSenderNames.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\SpoutSharedMemory.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\Spout.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\SpoutCommon.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutSDK\src\SpoutDirectX.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutSDK\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\SpoutControls\src\SpoutControls.h">
+      <Filter>uc_libs\lib_spout\libs\SpoutControls\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

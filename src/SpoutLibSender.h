@@ -2,11 +2,26 @@
 
 #include "SpoutSender.h"
 
-#include <memory>
-#include "ofTexture.h"
+#include "SpoutLibUtilities.h"
 
 namespace SpoutLib
 {
+	class SpoutTexture
+	{
+	public:
+		gl::Texture2dRef ttttt;
+
+		void fff()
+		{
+			
+			
+			tex->getInternalFormat();
+			tex->getId();
+			tex->getTarget();
+			
+		}
+	};
+
 	using SenderRef = std::shared_ptr<class Sender>;
 
 	class Sender
@@ -32,7 +47,7 @@ namespace SpoutLib
 			:spout_name(spoutName)
 		{
 		}
-
+		
 		void updateSender(ofTexture& tex, bool bInvert)
 		{
 			if (tex.isAllocated() == false)
