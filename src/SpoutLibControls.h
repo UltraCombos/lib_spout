@@ -11,7 +11,7 @@ namespace SpoutLib
 	class Controls
 	{
 	public:
-		static ControlsRef create(const string& spoutName = "OF Spout")
+		static ControlsRef create(const string& spoutName = "")
 		{
 			return ControlsRef(new Controls(spoutName));
 		}
@@ -29,7 +29,7 @@ namespace SpoutLib
 				createControls(parameters);
 				if (spout_controls->OpenControls(spout_name))
 				{
-					ofLogNotice(module, "[%s] is created", spout_name.c_str());
+					printf("[%s] '%s' is created\n", module.c_str(), spout_name.c_str());
 				}
 				else
 				{
@@ -46,7 +46,7 @@ namespace SpoutLib
 					{
 						if (control_map.find(ctrl.name) == control_map.end())
 						{
-							ofLogWarning(module, "get contorl [%s] is unknown", ctrl.name.c_str());
+							printf("[%s] get contorl '%s' is unknown\n", module.c_str(), ctrl.name.c_str());
 							continue;
 						}
 						switch (ctrl.type)
@@ -58,7 +58,7 @@ namespace SpoutLib
 						case 10: 
 							setValue(control_map[ctrl.name], ctrl.value); break;
 						default:
-							ofLogWarning(module, "get contorl [%s] type(%u) is unknown", ctrl.name.c_str(), ctrl.type);
+							printf("[%s] get contorl '%s' type(%u) is unknown\n", module.c_str(), ctrl.name.c_str(), ctrl.type);
 							break;
 						}
 					}
@@ -86,7 +86,7 @@ namespace SpoutLib
 				}
 				if (spout_controls->OpenControls(spout_name))
 				{
-					ofLogNotice(module, "[%s] is created", spout_name.c_str());
+					printf("[%s] '%s' is created\n", module.c_str(), spout_name.c_str());
 				}
 				else
 				{
@@ -125,19 +125,17 @@ namespace SpoutLib
 							cout << "add " << ctrl.name << endl;
 						}
 						else {
-							ofLogWarning(module, "get contorl [%s] type(%u) is unknown", ctrl.name.c_str(), ctrl.type);
+							printf("[%s] get contorl [%s] type(%u) is unknown\n", module.c_str(), ctrl.name.c_str(), ctrl.type);
 						}
 					}
 				}
-				if (spout_controls->SetControls(controls) == false)
-					printf("fffffff\n");
 			}
 		}
 
 		void openSpoutController()
 		{
-			if (spout_controls)
-				spout_controls->OpenSpoutController();
+			//if (spout_controls)
+			//	spout_controls->OpenSpoutController();
 		}
 
 	private:
@@ -159,7 +157,7 @@ namespace SpoutLib
 					string value = param.get();
 					spout_controls->CreateControl(name, "text", value);
 					control_map[name] = param.newReference();
-					ofLogNotice(module, "CreateControl text: %s, %s", name.c_str(), value.c_str());
+					printf("[%s] CreateControl text: %s, %s\n", module.c_str(), name.c_str(), value.c_str());
 				}
 				else if (parameters[i].type() == typeid(ofParameter<bool>).name()) {
 					ofParameter<bool>& param = parameters[i].cast<bool>();
@@ -167,7 +165,7 @@ namespace SpoutLib
 					bool value = param.get();
 					spout_controls->CreateControl(name, "bool", int(value));
 					control_map[name] = param.newReference();
-					ofLogNotice(module, "CreateControl bool: %s, %u", name.c_str(), int(value));
+					printf("[%s] CreateControl bool: %s, %u\n", module.c_str(), name.c_str(), int(value));
 				}
 				else if (parameters[i].type() == typeid(ofParameter<float>).name()) {
 					ofParameter<float>& param = parameters[i].cast<float>();
@@ -177,7 +175,7 @@ namespace SpoutLib
 					float maximum = param.getMax();
 					spout_controls->CreateControl(name, "float", minimum, maximum, value);
 					control_map[name] = param.newReference();
-					ofLogNotice(module, "CreateControl float: %s, %f, %f, %f", name.c_str(), value, minimum, maximum);
+					printf("[%s] CreateControl float: %s, %f, %f, %f\n", module.c_str(), name.c_str(), value, minimum, maximum);
 				}
 				else if (parameters[i].type() == typeid(ofParameterGroup).name()) {
 					createControls((ofParameterGroup&)parameters[i]);
