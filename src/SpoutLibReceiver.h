@@ -20,10 +20,9 @@ namespace SpoutLib
 			release();
 		}
 
-		SPOUTLIB_TEX update(bool bInvert = SPOUTLIB_INVERT)
+		bool update(bool bInvert = SPOUTLIB_INVERT)
 		{
-			updateReceiver(bInvert);
-			return texture;
+			return updateReceiver(bInvert);
 		}
 
 		void SelectSenderPanel()
@@ -32,9 +31,15 @@ namespace SpoutLib
 				receiver->SelectSenderPanel();
 		}
 
-		bool isInitialized() { return (receiver != nullptr); }
 		std::string getName() { return spout_name; }
-		void setName(std::string name) { spout_name = name; release(); }
+		void setName(std::string name) 
+		{ 
+			if (name.compare(spout_name) != 0)
+			{
+				spout_name = name; 
+				release();
+			}
+		}
 		int getWidth() { return width; }
 		int getHeight() { return height; }
 		SPOUTLIB_TEX getTexture() { return texture; }
@@ -45,7 +50,7 @@ namespace SpoutLib
 		{
 		}
 
-		void updateReceiver(bool bInvert)
+		bool updateReceiver(bool bInvert)
 		{
 			if (receiver == nullptr)
 			{
@@ -57,14 +62,15 @@ namespace SpoutLib
 					spout_name = std::string(mutableName);
 					printf("[%s] '%s' is created %ux%u\n", module.c_str(), spout_name.c_str(), width, height);
 					allocateTexture();
+					return true;
 				}
 				else
 				{
 					release();
+					return false;
 				}
 			}
-
-			if (receiver)
+			else
 			{
 				char mutableName[256];
 				strcpy_s(mutableName, spout_name.size() + 1, spout_name.c_str());
@@ -77,10 +83,12 @@ namespace SpoutLib
 					{
 						allocateTexture();
 					}
+					return true;
 				}
 				else
 				{
 					release();
+					return false;
 				}
 			}
 		}
