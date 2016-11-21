@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SpoutControls.h"
+#include "json.hpp"
 
 #include "ofParameter.h"
 
@@ -33,6 +34,7 @@ namespace SpoutLib
 				}
 				else
 				{
+					printf("[%s] '%s' create fail\n", module.c_str(), spout_name.c_str());
 					release();
 				}
 
@@ -76,13 +78,38 @@ namespace SpoutLib
 				string file_path;
 				if (spout_controls->FindControlFile(file_path))
 				{
-					
-					//cout << "get " << file_path << endl;
+					cout << "get " << file_path << endl;
+#if 1
+					std::string doc = ofBufferFromFile(file_path).getText();
+					size_t from_idx = doc.find("INPUTS") - 1;
+					size_t to_idx = doc.find_last_of(',');
+					doc = "{" + doc.substr(from_idx, to_idx - from_idx) + "}";
+					cout << doc << endl;
+					ofBufferToFile("spout_control.json", ofBuffer(doc));
+					auto& document = nlohmann::json::parse(doc.c_str());
+
+					if (document.find("CREDIT") != document.end())
+					{
+						cout << "ok" << endl;
+					}
+					else
+					{
+						cout << "q" << endl;
+					}
+#endif
 				}
-				string map_name = spout_name;
+				string map_name;
 				if (spout_controls->FindControls(map_name))
 				{
 					cout << "get " << map_name << endl;
+				}
+				if (spout_controls->CreateControls(map_name, controls))
+				{
+					cout << "create controls" << endl;
+				}
+				if (spout_controls->GetControls(controls))
+				{
+					cout << "get " << controls.size() << " controls" << endl;
 				}
 				if (spout_controls->OpenControls(spout_name))
 				{
@@ -91,17 +118,15 @@ namespace SpoutLib
 				else
 				{
 					//cout << "check" << endl;
-					release();
+					//release();
 				}
 
 			}
 
 			if (spout_controls)
 			{
-				
 				if (spout_controls->CheckControls(controls))
 				{
-					
 					for (const auto& ctrl : controls)
 					{
 						if (control_map.find(ctrl.name) != control_map.end())
@@ -110,19 +135,19 @@ namespace SpoutLib
 							ofParameter<std::string> p;
 							parameters.add(p.set(ctrl.name, ctrl.text));
 							control_map[ctrl.name] = p.newReference();
-							cout << "add " << ctrl.name << endl;
+							//cout << "add " << ctrl.name << endl;
 						}
 						else if (ctrl.type == 0) {
 							ofParameter<bool> p;
 							parameters.add(p.set(ctrl.name, static_cast<int>(ctrl.value) == 1));
 							control_map[ctrl.name] = p.newReference();
-							cout << "add " << ctrl.name << endl;
+							//cout << "add " << ctrl.name << endl;
 						}
 						else if (ctrl.type == 10) {
 							ofParameter<float> p;
 							parameters.add(p.set(ctrl.name, ctrl.value));
 							control_map[ctrl.name] = p.newReference();
-							cout << "add " << ctrl.name << endl;
+							//cout << "add " << ctrl.name << endl;
 						}
 						else {
 							printf("[%s] get contorl [%s] type(%u) is unknown\n", module.c_str(), ctrl.name.c_str(), ctrl.type);
@@ -134,8 +159,8 @@ namespace SpoutLib
 
 		void openSpoutController()
 		{
-			//if (spout_controls)
-			//	spout_controls->OpenSpoutController();
+			if (spout_controls)
+				spout_controls->OpenSpoutController();
 		}
 
 	private:
@@ -149,9 +174,10 @@ namespace SpoutLib
 			//string name = parameters[i].getEscapedName();
 			//bool value = parameters[i].cast<bool>();
 			// types: event, bool, text, float
+			control_map.clear();
 			for (size_t i = 0; i < parameters.size(); i++)
 			{
-				if (parameters[i].type() == typeid(ofParameter<string>).name()) {
+				if (parameters[i].type().compare(typeid(ofParameter<string>).name()) == 0) {
 					ofParameter<string>& param = parameters[i].cast<string>();
 					string name = param.getName();
 					string value = param.get();
@@ -159,7 +185,7 @@ namespace SpoutLib
 					control_map[name] = param.newReference();
 					printf("[%s] CreateControl text: %s, %s\n", module.c_str(), name.c_str(), value.c_str());
 				}
-				else if (parameters[i].type() == typeid(ofParameter<bool>).name()) {
+				else if (parameters[i].type().compare(typeid(ofParameter<bool>).name()) == 0) {
 					ofParameter<bool>& param = parameters[i].cast<bool>();
 					string name = param.getName();
 					bool value = param.get();
@@ -167,7 +193,7 @@ namespace SpoutLib
 					control_map[name] = param.newReference();
 					printf("[%s] CreateControl bool: %s, %u\n", module.c_str(), name.c_str(), int(value));
 				}
-				else if (parameters[i].type() == typeid(ofParameter<float>).name()) {
+				else if (parameters[i].type().compare(typeid(ofParameter<float>).name()) == 0) {
 					ofParameter<float>& param = parameters[i].cast<float>();
 					string name = param.getName();
 					float value = param.get();
@@ -177,7 +203,7 @@ namespace SpoutLib
 					control_map[name] = param.newReference();
 					printf("[%s] CreateControl float: %s, %f, %f, %f\n", module.c_str(), name.c_str(), value, minimum, maximum);
 				}
-				else if (parameters[i].type() == typeid(ofParameterGroup).name()) {
+				else if (parameters[i].type().compare(typeid(ofParameterGroup).name()) == 0) {
 					createControls((ofParameterGroup&)parameters[i]);
 				}
 			}

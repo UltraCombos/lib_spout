@@ -24,6 +24,9 @@ namespace SpoutLib
 		{
 			updateSender(tex, bInvert);
 		}
+		
+		bool isInitialized() { return (sender != nullptr); }
+		std::string getNmae() { return spout_name; }
 
 	private:
 		Sender(const std::string& spoutName)

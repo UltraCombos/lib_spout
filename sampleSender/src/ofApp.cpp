@@ -13,8 +13,8 @@ void ofApp::setup(){
 	}
 	
 	{
-		spout_sender = SpoutLib::Sender::create("OF Spout Sender");
-		spout_controls = SpoutLib::Controls::create("OF Spout Sender");
+		spout_sender = SpoutLib::Sender::create("SpoutLib Sender");
+		
 	}
 
 	// allocate fbo
@@ -45,9 +45,9 @@ void ofApp::setup(){
 		gui.add(g_settings);
 
 		spout_group.setName("spout controls");
-		spout_group.add(spout_text.set("spout_text", "from of"));
-		spout_group.add(spout_bool.set("spout_bool", true));
-		spout_group.add(spout_float.set("spout_float", 1.0f, 0.0f, TWO_PI));
+		spout_group.add(spout_text.set("s_text", "from openFramewroks"));
+		spout_group.add(spout_bool.set("s_bool", true));
+		spout_group.add(spout_float.set("s_float", 1.0f, 0.0f, TWO_PI));
 		gui.add(spout_group);
 
 		gui.loadFromFile(gui_filename);
@@ -77,7 +77,11 @@ void ofApp::update(){
 	}
 	
 	spout_sender->update(fbo.getTexture());
-	spout_controls->send(spout_group);
+	
+	if (spout_controls)
+		spout_controls->send(spout_group);
+	else if (spout_sender->isInitialized())
+		spout_controls = SpoutLib::Controls::create(spout_sender->getNmae());
 }
 
 //--------------------------------------------------------------

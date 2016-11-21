@@ -207,6 +207,7 @@
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h" />
+    <ClInclude Include="..\libs\SpoutControls\src\json.hpp" />
     <ClInclude Include="..\libs\SpoutControls\src\SpoutControls.h" />
     <ClInclude Include="..\libs\SpoutSDK\src\Spout.h" />
     <ClInclude Include="..\libs\SpoutSDK\src\SpoutCommon.h" />
