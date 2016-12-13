@@ -73,86 +73,46 @@ namespace SpoutLib
 			if (spout_controls == nullptr)
 			{
 				spout_controls = new SpoutControls;
-				//spout_controls->FindControls(spout_name);
-
 				string file_path;
 				if (spout_controls->FindControlFile(file_path))
 				{
-					cout << "get " << file_path << endl;
-#if 1
-					std::string doc = ofBufferFromFile(file_path).getText();
-					size_t from_idx = doc.find("INPUTS") - 1;
-					size_t to_idx = doc.find_last_of(',');
-					doc = "{" + doc.substr(from_idx, to_idx - from_idx) + "}";
-					cout << doc << endl;
-					ofBufferToFile("spout_control.json", ofBuffer(doc));
-					auto& document = nlohmann::json::parse(doc.c_str());
-
-					if (document.find("CREDIT") != document.end())
-					{
-						cout << "ok" << endl;
-					}
-					else
-					{
-						cout << "q" << endl;
-					}
-#endif
+					parseControls(file_path);
 				}
 				string map_name;
 				if (spout_controls->FindControls(map_name))
 				{
 					cout << "get " << map_name << endl;
+					parameters.setName(map_name);
+					for (auto& ctrl : controls)
+					{
+						switch (ctrl.type)
+						{
+						case 100:
+							parameters.add(ofParameter<string>().set(ctrl.name, ctrl.text)); break;
+						case 0:
+							parameters.add(ofParameter<bool>().set(ctrl.name, static_cast<bool>(ctrl.value))); break;
+						case 10:
+							parameters.add(ofParameter<float>().set(ctrl.name, ctrl.value)); break;
+						}
+					}
 				}
 				if (spout_controls->CreateControls(map_name, controls))
 				{
 					cout << "create controls" << endl;
-				}
-				if (spout_controls->GetControls(controls))
-				{
-					cout << "get " << controls.size() << " controls" << endl;
-				}
-				if (spout_controls->OpenControls(spout_name))
-				{
-					printf("[%s] '%s' is created\n", module.c_str(), spout_name.c_str());
-				}
-				else
-				{
-					//cout << "check" << endl;
-					//release();
-				}
+				}			
 
 			}
 
 			if (spout_controls)
 			{
-				if (spout_controls->CheckControls(controls))
+				for (auto& ctrl : controls)
 				{
-					for (const auto& ctrl : controls)
-					{
-						if (control_map.find(ctrl.name) != control_map.end())
-							continue;
-						if (ctrl.type == 100) {
-							ofParameter<std::string> p;
-							parameters.add(p.set(ctrl.name, ctrl.text));
-							control_map[ctrl.name] = p.newReference();
-							//cout << "add " << ctrl.name << endl;
-						}
-						else if (ctrl.type == 0) {
-							ofParameter<bool> p;
-							parameters.add(p.set(ctrl.name, static_cast<int>(ctrl.value) == 1));
-							control_map[ctrl.name] = p.newReference();
-							//cout << "add " << ctrl.name << endl;
-						}
-						else if (ctrl.type == 10) {
-							ofParameter<float> p;
-							parameters.add(p.set(ctrl.name, ctrl.value));
-							control_map[ctrl.name] = p.newReference();
-							//cout << "add " << ctrl.name << endl;
-						}
-						else {
-							printf("[%s] get contorl [%s] type(%u) is unknown\n", module.c_str(), ctrl.name.c_str(), ctrl.type);
-						}
-					}
+					if (ctrl.type == 10)
+						ctrl.value = ABS(sin(ofGetElapsedTimef()));
+				}
+				if (spout_controls->SetControls(controls))
+				{
+					cout << "set ok" << endl;
 				}
 			}
 		}
@@ -206,6 +166,52 @@ namespace SpoutLib
 				else if (parameters[i].type().compare(typeid(ofParameterGroup).name()) == 0) {
 					createControls((ofParameterGroup&)parameters[i]);
 				}
+			}
+		}
+
+		void parseControls(const string& file_path)
+		{
+			cout << "get " << file_path << endl;
+			std::string doc = ofBufferFromFile(file_path).getText();
+			size_t from_idx = doc.find("INPUTS") - 1;
+			size_t to_idx = doc.find_last_of(',');
+			doc = doc.substr(from_idx, to_idx - from_idx);
+			to_idx = doc.find_last_of(',');
+			doc = "{" + doc.substr(0, to_idx) + "]}";
+			ofBufferToFile("spout_control.json", ofBuffer(doc));
+			auto& document = nlohmann::json::parse(doc.c_str());
+
+			if (document.find("INPUTS") != document.end())
+			{
+				//cout << "ok" << endl;
+				auto& inputs = document["INPUTS"];
+				for (size_t i = 0; i < inputs.size(); i++)
+				{
+					auto& input = inputs[i];
+					control ctrl;
+					ctrl.name = input.value("NAME", "");
+					string type = input.value("TYPE", "");
+					if (type == "text")
+					{
+						ctrl.type = 100;
+						ctrl.text = input.value("TEXT", "");
+					}
+					else if (type == "bool")
+					{
+						ctrl.type = 0;
+						ctrl.value = input.value("DEFAULT", 1.0f);
+					}
+					else if (type == "float")
+					{
+						ctrl.type = 10;
+						ctrl.value = input.value("DEFAULT", 1.0f);
+					}
+					controls.push_back(ctrl);
+				}
+			}
+			else
+			{
+				cout << "INPUTS is not found" << endl;
 			}
 		}
 

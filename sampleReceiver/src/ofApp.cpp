@@ -72,10 +72,10 @@ void ofApp::update(){
 		fbo.end();
 	}
 
-	spout_receiver->update();
+	//spout_receiver->update();
 	//spout_controls->update(spout_group);
 
-	if (spout_receiver->isInitialized())
+	if (spout_receiver->update())
 	{
 		if (spout_controls == nullptr)
 			spout_controls = SpoutLib::Controls::create(spout_receiver->getName());
@@ -97,7 +97,7 @@ void ofApp::draw(){
 		tex.draw(0, 0);
 	}
 
-	if (spout_receiver->isInitialized())
+	if (spout_receiver)
 	{
 		ofVec2f pos(20, 20);
 		ofVec2f offset(0, 15);
