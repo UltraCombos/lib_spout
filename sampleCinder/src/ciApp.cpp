@@ -23,9 +23,7 @@ public:
 private:
 	enum {
 		FBO_WIDTH = 1920,
-		FBO_HEIGHT = 1080,
-		MAX_PARTICLES = 1 << 20,
-		WORK_GROUP_SIZE = 1 << 10
+		FBO_HEIGHT = 1080
 	};
 	
 	const fs::path data_path = getAppPath().parent_path().parent_path().parent_path().append("/data/");
@@ -110,7 +108,10 @@ void ciApp::update()
 	}
 
 	spout_sender->update(fbo->getColorTexture());
-	spout_tex = spout_receiver->update();
+	if (spout_receiver->update())
+	{
+		spout_tex = spout_receiver->getTexture();
+	}
 }
 
 void ciApp::draw()
