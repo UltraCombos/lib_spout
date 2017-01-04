@@ -6,6 +6,12 @@
     <ClCompile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\uc_libs\lib_spout\src;..\..\..\uc_libs\lib_spout\libs\SpoutSDK\src;..\..\..\uc_libs\lib_spout\libs\SpoutControls\src</AdditionalIncludeDirectories>
     </ClCompile>	
+	
+	<PostBuildEvent>
+	  <Command>robocopy "$(ProjectDir)/../../../uc_libs/lib_spout/bin/" "$(ProjectDir)/bin/" "*.*" /njs /njh /np /fp /bytes
+%(Command)</Command>
+    </PostBuildEvent>	
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>
+
