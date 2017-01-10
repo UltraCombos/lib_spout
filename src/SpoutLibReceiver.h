@@ -97,6 +97,7 @@ namespace SpoutLib
 		{
 			if (receiver)
 			{
+				texture.clear();
 				receiver->ReleaseReceiver();
 				delete receiver;
 				receiver = nullptr;
