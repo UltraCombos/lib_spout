@@ -57,7 +57,7 @@ namespace SpoutLib
 				receiver = new SpoutReceiver;
 				char mutableName[256];
 				strcpy_s(mutableName, spout_name.size() + 1, spout_name.c_str());
-				if (receiver->CreateReceiver(mutableName, width, height, true))
+				if (receiver->CreateReceiver(mutableName, width, height, false))
 				{
 					spout_name = std::string(mutableName);
 					printf("[%s] '%s' is created %ux%u\n", module.c_str(), spout_name.c_str(), width, height);
