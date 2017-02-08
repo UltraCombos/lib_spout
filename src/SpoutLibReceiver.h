@@ -14,12 +14,12 @@ namespace SpoutLib
 		{
 			return ReceiverRef(new Receiver(spoutName));
 		}
-
+		/*
 		~Receiver()
 		{
-			release();
+			releaseTexture();
 		}
-
+		*/
 		bool update(bool bInvert = SPOUTLIB_INVERT)
 		{
 			return updateReceiver(bInvert);
@@ -27,8 +27,7 @@ namespace SpoutLib
 
 		void SelectSenderPanel()
 		{
-			if (receiver)
-				receiver->SelectSenderPanel();
+				receiver.SelectSenderPanel();
 		}
 
 		std::string getName() { return spout_name; }
@@ -37,7 +36,7 @@ namespace SpoutLib
 			if (name.compare(spout_name) != 0)
 			{
 				spout_name = name; 
-				release();
+				releaseTexture();
 			}
 		}
 		int getWidth() { return width; }
@@ -52,21 +51,21 @@ namespace SpoutLib
 
 		bool updateReceiver(bool bInvert)
 		{
-			if (receiver == nullptr)
+			if (bInitialized == false)
 			{
-				receiver = new SpoutReceiver;
 				char mutableName[256];
 				strcpy_s(mutableName, spout_name.size() + 1, spout_name.c_str());
-				if (receiver->CreateReceiver(mutableName, width, height, true))
+				if (receiver.CreateReceiver(mutableName, width, height, false))
 				{
 					spout_name = std::string(mutableName);
 					printf("[%s] '%s' is created %ux%u\n", module.c_str(), spout_name.c_str(), width, height);
 					allocateTexture();
+					bInitialized = true;
 					return true;
 				}
 				else
 				{
-					release();
+					//releaseTexture();
 					return false;
 				}
 			}
@@ -76,7 +75,7 @@ namespace SpoutLib
 				strcpy_s(mutableName, spout_name.size() + 1, spout_name.c_str());
 				GLuint id = Util::getId(texture);
 				GLenum target = Util::getTarget(texture);
-				if (receiver->ReceiveTexture(mutableName, width, height, id, target, bInvert))
+				if (receiver.ReceiveTexture(mutableName, width, height, id, target, bInvert))
 				{
 					spout_name = std::string(mutableName);
 					if (width != Util::getWidth(texture) || height != Util::getHeight(texture))
@@ -87,21 +86,21 @@ namespace SpoutLib
 				}
 				else
 				{
-					release();
+					releaseTexture();
+					receiver.ReleaseReceiver();
+					bInitialized = false;
 					return false;
 				}
 			}
 		}
 
-		void release()
-		{
-			if (receiver)
-			{
-				texture.clear();
-				receiver->ReleaseReceiver();
-				delete receiver;
-				receiver = nullptr;
-			}
+		void releaseTexture()
+		{			
+#ifdef CINDER_CINDER
+#error "Need to clear texture in Cinder"
+#else
+			texture.clear(); 
+#endif
 		}
 
 		void allocateTexture()
@@ -116,7 +115,8 @@ namespace SpoutLib
 		const std::string module = "SpoutLib::Receiver";
 
 		// receiver
-		SpoutReceiver* receiver = nullptr;
+		bool bInitialized = false;
+		SpoutReceiver receiver;
 		std::string spout_name;
 		unsigned int width = 0;
 		unsigned int height = 0;
