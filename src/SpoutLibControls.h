@@ -36,36 +36,37 @@ namespace SpoutLib
 				{
 					printf("[%s] '%s' create fail\n", module.c_str(), spout_name.c_str());
 					release();
+					return;
 				}
 
 			}
 			
-			if (spout_controls)
+			if (!spout_controls->CheckControls(controls))
 			{
-				if (spout_controls->CheckControls(controls))
+				return;
+			}
+
+			for (const auto& ctrl : controls)
+			{
+				if (control_map.find(ctrl.name) == control_map.end())
 				{
-					for (const auto& ctrl : controls)
-					{
-						if (control_map.find(ctrl.name) == control_map.end())
-						{
-							printf("[%s] get contorl '%s' is unknown\n", module.c_str(), ctrl.name.c_str());
-							continue;
-						}
-						switch (ctrl.type)
-						{
-						case 100: 
-							setValue(control_map[ctrl.name], ctrl.text); break;
-						case 0: 
-							setValue(control_map[ctrl.name], static_cast<int>(ctrl.value) == 1); break;
-						case 10: 
-							setValue(control_map[ctrl.name], ctrl.value); break;
-						default:
-							printf("[%s] get contorl '%s' type(%u) is unknown\n", module.c_str(), ctrl.name.c_str(), ctrl.type);
-							break;
-						}
-					}
-				}					
-			}			
+					printf("[%s] get contorl '%s' is unknown\n", module.c_str(), ctrl.name.c_str());
+					continue;
+				}
+
+				switch (ctrl.type)
+				{
+				case 100: 
+					setValue(control_map[ctrl.name], ctrl.text); break;
+				case 0: 
+					setValue(control_map[ctrl.name], static_cast<int>(ctrl.value) == 1); break;
+				case 10: 
+					setValue(control_map[ctrl.name], ctrl.value); break;
+				default:
+					printf("[%s] get contorl '%s' type(%u) is unknown\n", module.c_str(), ctrl.name.c_str(), ctrl.type);
+					break;
+				}
+			}						
 		}
 
 		void receive(ofParameterGroup& parameters)
@@ -78,6 +79,7 @@ namespace SpoutLib
 				{
 					parseControls(file_path);
 				}
+
 				string map_name;
 				if (spout_controls->FindControls(map_name))
 				{
@@ -96,6 +98,7 @@ namespace SpoutLib
 						}
 					}
 				}
+
 				if (spout_controls->CreateControls(map_name, controls))
 				{
 					cout << "create controls" << endl;
@@ -103,17 +106,15 @@ namespace SpoutLib
 
 			}
 
-			if (spout_controls)
+			for (auto& ctrl : controls)
 			{
-				for (auto& ctrl : controls)
-				{
-					if (ctrl.type == 10)
-						ctrl.value = ABS(sin(ofGetElapsedTimef()));
-				}
-				if (spout_controls->SetControls(controls))
-				{
-					cout << "set ok" << endl;
-				}
+				if (ctrl.type == 10)
+					ctrl.value = ABS(asinf(sinf(ofGetElapsedTimef())) * 4.f);
+			}
+
+			if (spout_controls->SetControls(controls))
+			{
+				//cout << "set ok" << endl;
 			}
 		}
 
