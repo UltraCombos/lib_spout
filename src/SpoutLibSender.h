@@ -20,9 +20,9 @@ namespace SpoutLib
 			release();
 		}
 
-		void update(SPOUTLIB_TEX tex, bool bInvert = SPOUTLIB_INVERT)
+		void update(SPOUTLIB_TEX tex, bool bInvert = SPOUTLIB_INVERT, DWORD dwFormat = 0U)
 		{
-			updateSender(tex, bInvert);
+			updateSender(tex, bInvert,dwFormat);
 		}
 		
 		bool isInitialized() { return (sender != nullptr); }
@@ -34,7 +34,7 @@ namespace SpoutLib
 		{
 		}
 		
-		void updateSender(SPOUTLIB_TEX tex, bool bInvert)
+		void updateSender(SPOUTLIB_TEX tex, bool bInvert, DWORD dwFormat)
 		{
 			if (Util::isAllocated(tex) == false)
 			{
@@ -52,7 +52,7 @@ namespace SpoutLib
 			if (sender == nullptr)
 			{
 				sender = new SpoutSender;
-				if (sender->CreateSender(spout_name.c_str(), width, height))
+				if (sender->CreateSender(spout_name.c_str(), width, height, dwFormat))
 				{
 					std::printf("[%s] '%s' is created\n", module.c_str(), spout_name.c_str());
 				}
