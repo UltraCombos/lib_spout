@@ -12,9 +12,12 @@
 //			17.03.16	- added bgra extensions to find out if they are supported at compile and runtime
 //			28.03.16	- caps is returned instead of fail for interop extensions
 //			29.03.16	- Fixed loadInteropExtensions flag test in loadGLextensions
+//			12.08.16	- Removed "isExtensionSupported" (https://github.com/leadedge/Spout2/issues/19)
+//			13.01.17	- Removed try/catch from wglDXRegisterObjectNV calls
+//						- Clean up #ifdefs in all functions - return true if FBO of PBO are defined elsewhere
 //
 
-		Copyright (c) 2014-2016, Lynn Jarvis. All rights reserved.
+		Copyright (c) 2014-2017, Lynn Jarvis. All rights reserved.
 
 		Redistribution and use in source and binary forms, with or without modification, 
 		are permitted provided that the following conditions are met:
@@ -97,12 +100,12 @@ glUnmapBufferPROC						glUnmapBufferEXT				= NULL;
 //
 bool loadInteropExtensions() {
 
-	#ifdef USE_GLEW
+#ifdef USE_GLEW
 	if(WGLEW_NV_DX_interop)
 		return true;
 	else
 		return false;
-	#else
+#else
 	wglDXOpenDeviceNV = (PFNWGLDXOPENDEVICENVPROC)wglGetProcAddress("wglDXOpenDeviceNV");
 	if(!wglDXOpenDeviceNV) {
 		return false;
@@ -133,7 +136,7 @@ bool loadInteropExtensions() {
 	}
 
 	return true;
-	#endif
+#endif
 
 }
 
@@ -147,28 +150,24 @@ bool loadFBOextensions() {
 	else
 		return false;
 	#else
-	try { // load extensions for FBO
-		glBindFramebufferEXT						= (glBindFramebufferEXTPROC)wglGetProcAddress("glBindFramebufferEXT");
-		glBindRenderbufferEXT						= (glBindRenderbufferEXTPROC)wglGetProcAddress("glBindRenderbufferEXT");
-		glCheckFramebufferStatusEXT					= (glCheckFramebufferStatusEXTPROC)wglGetProcAddress("glCheckFramebufferStatusEXT");
-		glDeleteFramebuffersEXT						= (glDeleteFramebuffersEXTPROC)wglGetProcAddress("glDeleteFramebuffersEXT");
-		glDeleteRenderBuffersEXT					= (glDeleteRenderBuffersEXTPROC)wglGetProcAddress("glDeleteRenderbuffersEXT");
-		glFramebufferRenderbufferEXT				= (glFramebufferRenderbufferEXTPROC)wglGetProcAddress("glFramebufferRenderbufferEXT");
-		glFramebufferTexture1DEXT					= (glFramebufferTexture1DEXTPROC)wglGetProcAddress("glFramebufferTexture1DEXT");
-		glFramebufferTexture2DEXT					= (glFramebufferTexture2DEXTPROC)wglGetProcAddress("glFramebufferTexture2DEXT");
-		glFramebufferTexture3DEXT					= (glFramebufferTexture3DEXTPROC)wglGetProcAddress("glFramebufferTexture3DEXT");
-		glGenFramebuffersEXT						= (glGenFramebuffersEXTPROC)wglGetProcAddress("glGenFramebuffersEXT");
-		glGenRenderbuffersEXT						= (glGenRenderbuffersEXTPROC)wglGetProcAddress("glGenRenderbuffersEXT");
-		glGenerateMipmapEXT							= (glGenerateMipmapEXTPROC)wglGetProcAddress("glGenerateMipmapEXT");
-		glGetFramebufferAttachmentParameterivEXT	= (glGetFramebufferAttachmentParameterivEXTPROC)wglGetProcAddress("glGetFramebufferAttachmentParameterivEXT");
-		glGetRenderbufferParameterivEXT				= (glGetRenderbufferParameterivEXTPROC)wglGetProcAddress("glGetRenderbufferParameterivEXT");
-		glIsFramebufferEXT							= (glIsFramebufferEXTPROC)wglGetProcAddress("glIsFramebufferEXT");
-		glIsRenderbufferEXT							= (glIsRenderbufferEXTPROC)wglGetProcAddress("glIsRenderbufferEXT");
-		glRenderbufferStorageEXT					= (glRenderbufferStorageEXTPROC)wglGetProcAddress("glRenderbufferStorageEXT");
-	}
-	catch (...) {
-		return false;
-	}
+	glBindFramebufferEXT						= (glBindFramebufferEXTPROC)wglGetProcAddress("glBindFramebufferEXT");
+	glBindRenderbufferEXT						= (glBindRenderbufferEXTPROC)wglGetProcAddress("glBindRenderbufferEXT");
+	glCheckFramebufferStatusEXT					= (glCheckFramebufferStatusEXTPROC)wglGetProcAddress("glCheckFramebufferStatusEXT");
+	glDeleteFramebuffersEXT						= (glDeleteFramebuffersEXTPROC)wglGetProcAddress("glDeleteFramebuffersEXT");
+	glDeleteRenderBuffersEXT					= (glDeleteRenderBuffersEXTPROC)wglGetProcAddress("glDeleteRenderbuffersEXT");
+	glFramebufferRenderbufferEXT				= (glFramebufferRenderbufferEXTPROC)wglGetProcAddress("glFramebufferRenderbufferEXT");
+	glFramebufferTexture1DEXT					= (glFramebufferTexture1DEXTPROC)wglGetProcAddress("glFramebufferTexture1DEXT");
+	glFramebufferTexture2DEXT					= (glFramebufferTexture2DEXTPROC)wglGetProcAddress("glFramebufferTexture2DEXT");
+	glFramebufferTexture3DEXT					= (glFramebufferTexture3DEXTPROC)wglGetProcAddress("glFramebufferTexture3DEXT");
+	glGenFramebuffersEXT						= (glGenFramebuffersEXTPROC)wglGetProcAddress("glGenFramebuffersEXT");
+	glGenRenderbuffersEXT						= (glGenRenderbuffersEXTPROC)wglGetProcAddress("glGenRenderbuffersEXT");
+	glGenerateMipmapEXT							= (glGenerateMipmapEXTPROC)wglGetProcAddress("glGenerateMipmapEXT");
+	glGetFramebufferAttachmentParameterivEXT	= (glGetFramebufferAttachmentParameterivEXTPROC)wglGetProcAddress("glGetFramebufferAttachmentParameterivEXT");
+	glGetRenderbufferParameterivEXT				= (glGetRenderbufferParameterivEXTPROC)wglGetProcAddress("glGetRenderbufferParameterivEXT");
+	glIsFramebufferEXT							= (glIsFramebufferEXTPROC)wglGetProcAddress("glIsFramebufferEXT");
+	glIsRenderbufferEXT							= (glIsRenderbufferEXTPROC)wglGetProcAddress("glIsRenderbufferEXT");
+	glRenderbufferStorageEXT					= (glRenderbufferStorageEXTPROC)wglGetProcAddress("glRenderbufferStorageEXT");
+	
 	if	  ( glBindFramebufferEXT						!= NULL && 
 			glBindRenderbufferEXT						!= NULL && 
 			glCheckFramebufferStatusEXT					!= NULL && 
@@ -191,32 +190,25 @@ bool loadFBOextensions() {
 	else {
 		return false;
 	}
-
-
 	#endif
-
-#endif
-
+#else
+	// FBO extensions defined elsewhere
 	return true;
+#endif
 }
 
 
 bool loadBLITextension() {
 
-	#ifdef USE_GLEW
+#ifdef USE_GLEW
 	if(GLEW_EXT_framebuffer_blit)
 		return true;
 	else
 		return false;
-	#else
-	try { // load additional function for advanced FBO buffer copying
-		glBlitFramebufferEXT = (glBlitFramebufferEXTPROC) wglGetProcAddress("glBlitFramebufferEXT");
-	}
-	catch (...)	{
-		return false;
-	}
+#else
+	glBlitFramebufferEXT = (glBlitFramebufferEXTPROC) wglGetProcAddress("glBlitFramebufferEXT");
 	return glBlitFramebufferEXT!=NULL;
-	#endif
+#endif
 
 }
 
@@ -233,7 +225,7 @@ bool loadSwapExtensions()
 }
 
 
-// =================== LJ - PBO support 18.01.14 ==================
+// =================== PBO support 18.01.14 ==================
 bool loadPBOextensions() 
 {
 
@@ -245,17 +237,13 @@ bool loadPBOextensions()
 	else
 		return false;
 	#else
-	try { // load extensions for PBO
-		glGenBuffersEXT	= (glGenBuffersPROC)wglGetProcAddress("glGenBuffers");
-		glDeleteBuffersEXT = (glDeleteBuffersPROC)wglGetProcAddress("glDeleteBuffers");
-		glBindBufferEXT	= (glBindBufferPROC)wglGetProcAddress("glBindBuffer");
-		glBufferDataEXT	= (glBufferDataPROC)wglGetProcAddress("glBufferData");
-		glMapBufferEXT = (glMapBufferPROC)wglGetProcAddress("glMapBuffer");
-		glUnmapBufferEXT = (glUnmapBufferPROC)wglGetProcAddress("glUnmapBuffer");
-	}
-	catch (...) {
-		return false;
-	}
+	glGenBuffersEXT	= (glGenBuffersPROC)wglGetProcAddress("glGenBuffers");
+	glDeleteBuffersEXT = (glDeleteBuffersPROC)wglGetProcAddress("glDeleteBuffers");
+	glBindBufferEXT	= (glBindBufferPROC)wglGetProcAddress("glBindBuffer");
+	glBufferDataEXT	= (glBufferDataPROC)wglGetProcAddress("glBufferData");
+	glMapBufferEXT = (glMapBufferPROC)wglGetProcAddress("glMapBuffer");
+	glUnmapBufferEXT = (glUnmapBufferPROC)wglGetProcAddress("glUnmapBuffer");
+
 	if(glGenBuffersEXT != NULL && glDeleteBuffersEXT != NULL
 	&& glBindBufferEXT != NULL && glBufferDataEXT    != NULL
 	&& glMapBufferEXT  != NULL && glUnmapBufferEXT   != NULL) {
@@ -266,15 +254,17 @@ bool loadPBOextensions()
 	}
 	#endif
 
+#else
+	// PBO extensions defined elsewhere
+	return true;
 #endif
-
-	// return true;
-
 }
+
+
 
 bool InitializeGlew()
 {
-	#ifdef USE_GLEW
+#ifdef USE_GLEW
 	HGLRC glContext;
 	GLenum glew_error;
 
@@ -301,9 +291,10 @@ bool InitializeGlew()
 	// http://glew.sourceforge.net/basic.html
 	//
 	return true;
-	#else
+#else
+	// Glew usage not defined so cannot initialize
 	return false;
-	#endif
+#endif
 }
 
 //
@@ -313,9 +304,11 @@ unsigned int loadGLextensions() {
 	
 	unsigned int caps = 0; // as per elio glextensions
 
-	#ifdef USE_GLEW
+	// printf("loadGLextensions\n");
+
+#ifdef USE_GLEW
 	InitializeGlew(); // probably needs failure check
-	#endif
+#endif
 
 	// Check for FBO extensions first - no use continuing without them
 	if(!loadFBOextensions()) {
@@ -339,7 +332,7 @@ unsigned int loadGLextensions() {
 	}
 
 	// Find out whether bgra extensions are supported at compile and runtime
-	#ifdef GL_EXT_bgra
+#ifdef GL_EXT_bgra
 	//
 	// "isExtensionSupported" code yet to be fully tested for
 	// various compilers, operating systems and environments.
@@ -348,14 +341,12 @@ unsigned int loadGLextensions() {
 	// if(isExtensionSupported("GL_EXT_bgra")) {
 		caps |= GLEXT_SUPPORT_BGRA;
 	// }
-	#endif
+#endif
 
 	// Load wgl interop extensions - not needed for memoryshare
 	if (loadInteropExtensions()) {
 		caps |= GLEXT_SUPPORT_NVINTEROP;
 	}
-
-
 
 	return caps;
 
@@ -363,8 +354,9 @@ unsigned int loadGLextensions() {
 
 
 //
-//	Used to determine support for GL_EXT_bgra extensions
-//
+// Used to determine support for GL_EXT_bgra extensions
+// Currently not used
+/*
 bool isExtensionSupported(const char *extension)
 {
 	const char * extensionsstr = NULL;
@@ -380,7 +372,7 @@ bool isExtensionSupported(const char *extension)
 		return false;
 
 	versionstr = (const char *)glGetString(GL_VERSION);
-	printf("OpenGL version (%s)\n", versionstr);
+	// printf("OpenGL version (%s)\n", versionstr);
 
 	extensionsstr = (const char *)glGetString(GL_EXTENSIONS);
 
@@ -390,7 +382,7 @@ bool isExtensionSupported(const char *extension)
 
 	if(extensionsstr == NULL) {
 
-		printf("glGetString(GL_VERSION) not supported\n");
+		// printf("glGetString(GL_VERSION) not supported\n");
 
 		//
 		// glGetstring not supported
@@ -412,21 +404,21 @@ bool isExtensionSupported(const char *extension)
 					}
 				}
 				if(i < n) {
-					printf("glGetStringi(%d) %s found\n", i, exc);
+					// printf("glGetStringi(%d) %s found\n", i, exc);
 					return true;
 				}
 			}
 			else {
-				printf("glGetIntegerv(GL_NUM_EXTENSIONS) did not return a value\nso unable to get extensions for this gl driver\n");
+				// printf("glGetIntegerv(GL_NUM_EXTENSIONS) did not return a value\nso unable to get extensions for this gl driver\n");
 			}
 		}
 		else {
-			printf("glGetString(GL_EXTENSIONS) returned null, but glGetStringi is NULL,\nso unable to get extensions for this gl driver\n");
+			// printf("glGetString(GL_EXTENSIONS) returned null, but glGetStringi is NULL,\nso unable to get extensions for this gl driver\n");
 		}
 	} 
 	else {
 
-		printf("glGetString(GL_VERSION) supported\n");
+		// printf("glGetString(GL_VERSION) supported\n");
 
 		//
 		// glGetString supported
@@ -445,7 +437,7 @@ bool isExtensionSupported(const char *extension)
 		    if (where == start || *(where - 1) == ' ') {
 				if (*terminator == ' ' || *terminator == '\0') {
 					*terminator = '\0';
-					printf("Extension %s found\n", where);
+					// printf("Extension %s found\n", where);
 					return true;
 				}
 			}
@@ -456,3 +448,4 @@ bool isExtensionSupported(const char *extension)
 	return false;
 
 }
+*/
