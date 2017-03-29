@@ -1,17 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
-  <PropertyGroup Label="UserMacros" /> 
+  <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\uc_libs\lib_spout\src;..\..\..\uc_libs\lib_spout\libs\SpoutSDK\src;..\..\..\uc_libs\lib_spout\libs\SpoutControls\src</AdditionalIncludeDirectories>
-    </ClCompile>	
-	
-	<PostBuildEvent>
-	  <Command>robocopy "$(ProjectDir)/../../../uc_libs/lib_spout/bin/" "$(ProjectDir)/bin/" "*.*" /njs /njh /np /fp /bytes
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\uc_libs\lib_spout\libs\SpoutSDK\include;..\..\..\uc_libs\lib_spout\src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>robocopy "$(ProjectDir)/../../../uc_libs/lib_spout/bin/" "$(ProjectDir)/bin/" "*.*" /njs /njh /np /fp /bytes
+robocopy "$(ProjectDir)/../../../uc_libs/lib_spout/libs/SpoutSDK/lib/$(Platform)/$(Configuration)/" "$(ProjectDir)/bin/" "*.dll" /njs /njh /np /fp /bytes
 %(Command)</Command>
-    </PostBuildEvent>	
+    </PostBuildEvent>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\..\uc_libs\lib_spout\libs\SpoutSDK\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Spout_2_006.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>
-
