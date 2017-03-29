@@ -77,11 +77,6 @@ void ofApp::update(){
 	}
 	
 	spout_sender->update(fbo.getTexture());
-	
-	if (spout_controls)
-		spout_controls->send(spout_group);
-	else if (spout_sender->isInitialized())
-		spout_controls = SpoutLib::Controls::create(spout_sender->getNmae());
 }
 
 //--------------------------------------------------------------
@@ -117,9 +112,6 @@ void ofApp::keyPressed(int key){
 		break;
 	case 'l':
 		gui.loadFromFile(gui_filename);
-		break;
-	case 'c':
-		spout_controls->openSpoutController();
 		break;
 	}
 }
