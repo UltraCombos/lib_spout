@@ -54,9 +54,6 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
 	ofSetWindowTitle("oF Application: " + ofToString(ofGetFrameRate(), 1));
-
-	
-
 	// update params and ubo
 	updateParameters();
 	
@@ -72,16 +69,7 @@ void ofApp::update(){
 		fbo.end();
 	}
 
-	//spout_receiver->update();
-	//spout_controls->update(spout_group);
-
-	if (spout_receiver->update())
-	{
-		if (spout_controls == nullptr)
-			spout_controls = SpoutLib::Controls::create(spout_receiver->getName());
-		else
-			spout_controls->receive(spout_group);
-	}
+	spout_receiver->update();
 }
 
 //--------------------------------------------------------------
@@ -134,9 +122,6 @@ void ofApp::keyPressed(int key){
 		break;
 	case 'e':
 		spout_receiver->SelectSenderPanel();
-		break;
-	case 'r':
-		//spout_controls->openSpoutController();
 		break;
 	}
 }

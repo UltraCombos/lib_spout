@@ -3,7 +3,6 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 
-#include "SpoutLibControls.h"
 #include "SpoutLibReceiver.h"
 
 class ofApp : public ofBaseApp{
@@ -43,7 +42,6 @@ private:
 
 	// spout
 	SpoutLib::ReceiverRef spout_receiver = nullptr;
-	SpoutLib::ControlsRef spout_controls = nullptr;
 };
 
 
