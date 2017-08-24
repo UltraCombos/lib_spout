@@ -20,7 +20,7 @@ namespace SpoutLib
 			release();
 		}
 
-		void update(SPOUTLIB_TEX tex, bool bInvert = SPOUTLIB_INVERT, DWORD dwFormat = 0U)
+		void update(SPOUTLIB_TEX tex, bool bInvert = SPOUTLIB_INVERT, DXGI_FORMAT dwFormat = DXGI_FORMAT_B8G8R8A8_UNORM)
 		{
 			updateSender(tex, bInvert,dwFormat);
 		}
