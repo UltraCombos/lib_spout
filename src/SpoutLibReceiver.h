@@ -10,9 +10,9 @@ namespace SpoutLib
 	class Receiver
 	{
 	public:
-		static ReceiverRef create(const std::string& spoutName = "")
+		static ReceiverRef create(const std::string& spoutName = "", GLuint glFormat = GL_RGBA8)
 		{
-			return ReceiverRef(new Receiver(spoutName));
+			return ReceiverRef(new Receiver(spoutName, glFormat));
 		}
 		/*
 		~Receiver()
@@ -44,8 +44,9 @@ namespace SpoutLib
 		SPOUTLIB_TEX getTexture() { return texture; }
 
 	private:
-		Receiver(const std::string& spoutName)
+		Receiver(const std::string& spoutName,GLuint glFormat)
 			:spout_name(spoutName)
+			, glInternalFormat(glFormat)
 		{
 		}
 
@@ -120,7 +121,7 @@ namespace SpoutLib
 		std::string spout_name;
 		unsigned int width = 0;
 		unsigned int height = 0;
-		GLint glInternalFormat = GL_RGBA8;
+		GLint glInternalFormat;
 #ifdef CINDER_CINDER
 		ci::gl::Texture2dRef texture = nullptr;
 #else
