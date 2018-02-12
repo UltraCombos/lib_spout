@@ -20,6 +20,11 @@ namespace SpoutLib
 			releaseTexture();
 		}
 		*/
+		bool isInitialized()
+		{
+			return bInitialized;
+		}
+
 		bool update(bool bInvert = SPOUTLIB_INVERT)
 		{
 			return updateReceiver(bInvert);
@@ -30,12 +35,12 @@ namespace SpoutLib
 				receiver.SelectSenderPanel();
 		}
 
-		std::string getName() { return spout_name; }
-		void setName(std::string name) 
+		std::string getName() { return mutableName; }
+		void setName(std::string const& name) 
 		{ 
-			if (name.compare(spout_name) != 0)
+			if (strncmp(mutableName, name.c_str(), sizeof(mutableName)) != 0)
 			{
-				spout_name = name; 
+				mf_setName(name);
 				releaseTexture();
 			}
 		}
@@ -45,21 +50,23 @@ namespace SpoutLib
 
 	private:
 		Receiver(const std::string& spoutName,GLuint glFormat)
-			:spout_name(spoutName)
-			, glInternalFormat(glFormat)
+		: glInternalFormat(glFormat)
 		{
+			mf_setName(spoutName);
+		}
+
+		void mf_setName(std::string const& spoutName)
+		{
+			strcpy_s(mutableName, std::min<size_t>(spoutName.size() + 1, sizeof(mutableName)), spoutName.c_str());
 		}
 
 		bool updateReceiver(bool bInvert)
 		{
 			if (bInitialized == false)
 			{
-				char mutableName[256];
-				strcpy_s(mutableName, spout_name.size() + 1, spout_name.c_str());
 				if (receiver.CreateReceiver(mutableName, width, height, false))
 				{
-					spout_name = std::string(mutableName);
-					printf("[%s] '%s' is created %ux%u\n", module.c_str(), spout_name.c_str(), width, height);
+					printf("[%s] '%s' is created %ux%u\n", module.c_str(), mutableName, width, height);
 					allocateTexture();
 					bInitialized = true;
 					return true;
@@ -72,13 +79,10 @@ namespace SpoutLib
 			}
 			else
 			{
-				char mutableName[256];
-				strcpy_s(mutableName, spout_name.size() + 1, spout_name.c_str());
 				GLuint id = Util::getId(texture);
 				GLenum target = Util::getTarget(texture);
 				if (receiver.ReceiveTexture(mutableName, width, height, id, target, bInvert))
 				{
-					spout_name = std::string(mutableName);
 					if (width != Util::getWidth(texture) || height != Util::getHeight(texture))
 					{
 						allocateTexture();
@@ -117,8 +121,8 @@ namespace SpoutLib
 
 		// receiver
 		bool bInitialized = false;
+		char mutableName[256];
 		SpoutReceiver receiver;
-		std::string spout_name;
 		unsigned int width = 0;
 		unsigned int height = 0;
 		GLint glInternalFormat;
