@@ -7,12 +7,16 @@
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\uc_libs\lib_spout\libs\SpoutSDK\include;..\..\..\uc_libs\lib_spout\src</AdditionalIncludeDirectories>
     </ClCompile>
     <PostBuildEvent>
-      <Command>robocopy "$(ProjectDir)/../../../uc_libs/lib_spout/bin/" "$(ProjectDir)/bin/" "*.*" /njs /njh /np /fp /bytes
-robocopy "$(ProjectDir)/../../../uc_libs/lib_spout/libs/SpoutSDK/lib/$(Platform)/$(Configuration)/" "$(ProjectDir)/bin/" "*.dll" /njs /njh /np /fp /bytes
+      <Command Condition="$(Configuration.Contains('Debug'))">robocopy "$(ProjectDir)/../../../uc_libs/lib_spout/bin/" "$(ProjectDir)/bin/" "*.*" /njs /njh /np /fp /bytes
+robocopy "$(ProjectDir)/../../../uc_libs/lib_spout/libs/SpoutSDK/lib/$(Platform)/Debug/" "$(ProjectDir)/bin/" "*.dll" /njs /njh /np /fp /bytes
+%(Command)</Command>	
+      <Command Condition="$(Configuration.Contains('Release'))">robocopy "$(ProjectDir)/../../../uc_libs/lib_spout/bin/" "$(ProjectDir)/bin/" "*.*" /njs /njh /np /fp /bytes
+robocopy "$(ProjectDir)/../../../uc_libs/lib_spout/libs/SpoutSDK/lib/$(Platform)/Release/" "$(ProjectDir)/bin/" "*.dll" /njs /njh /np /fp /bytes
 %(Command)</Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\uc_libs\lib_spout\libs\SpoutSDK\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="$(Configuration.Contains('Debug'))">..\..\..\uc_libs\lib_spout\libs\SpoutSDK\lib\$(Platform)\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+	  <AdditionalLibraryDirectories Condition="$(Configuration.Contains('Release'))">..\..\..\uc_libs\lib_spout\libs\SpoutSDK\lib\$(Platform)\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Spout_2_006.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
