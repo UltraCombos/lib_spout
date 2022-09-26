@@ -26,7 +26,7 @@ namespace SpoutLib
 		}
 		
 		bool isInitialized() { return (sender != nullptr); }
-		std::string getNmae() { return spout_name; }
+		std::string getName() { return spout_name; }
 
 	private:
 		Sender(const std::string& spoutName)

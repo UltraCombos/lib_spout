@@ -32,8 +32,13 @@ namespace SpoutLib
 
 		void SelectSenderPanel()
 		{
-				receiver.SelectSenderPanel();
+			receiver.SelectSenderPanel();
 		}
+		SpoutReceiver& getRawReceiver()
+		{
+			return receiver;
+		}
+
 
 		std::string getName() { return mutableName; }
 		void setName(std::string const& name) 
