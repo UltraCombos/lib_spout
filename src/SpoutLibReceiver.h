@@ -51,6 +51,7 @@ namespace SpoutLib
 		}
 		int getWidth() { return width; }
 		int getHeight() { return height; }
+		int getFormat() { return glInternalFormat; }
 		SPOUTLIB_TEX getTexture() { return texture; }
 
 	private:
